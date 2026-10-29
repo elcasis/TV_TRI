@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Super Geometría TV! 📐 Triángulos y Cuadriláteros (4.º Primaria)</title>
+
+    <!-- ==========================================================================
+         BLOQUE 1: ESTILOS CSS OPTIMIZADOS PARA SMART TV LG (webOS / 16:9)
+         --------------------------------------------------------------------------
+         - Diseño panorámico 100vw x 100vh sin barras de scroll (overflow: hidden).
+         - Tamaños relativos en vh/vw para verse nítido en televisores FullHD y 4K.
+         - Botones gigantes con estados :hover y :focus muy visibles para usar con
+           el puntero del mando LG Magic Remote o con las flechas de dirección.
+         - Sin etiquetas <input> para evitar que se abra el teclado virtual de LG.
+         ========================================================================== -->
+    <style>
+        :root {
+            --bg-deep: #0b1120;
+            --bg-mid: #1e1b4b;
+            --bg-bright: #1d4ed8;
+            --panel-bg: rgba(15, 23, 42, 0.78);
+            --panel-border: rgba(255, 255, 255, 0.22);
+            --gold: #facc15;
+            --gold-glow: rgba(250, 204, 21, 0.6);
+            --cyan: #38bdf8;
+            --green: #22c55e;
+            --red: #ef4444;
+            --orange: #f97316;
+            --purple: #c084fc;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: radial-gradient(circle at 20% 20%, #1e3a8a 0%, #0f172a 55%, #090d16 100%);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            font-size: 2.2vh;
+        }
+
+        /* ==========================================================================
+           CABECERA SUPERIOR (HUD DE TELEVISIÓN: VIDAS, PUNTOS, RACHA Y CONTROLES)
+           ========================================================================== */
+        header {
+            height: 10.5vh;
+            background: rgba(9, 13, 22, 0.85);
+            border-bottom: 0.35vh solid rgba(56, 189, 248, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2.5vw;
+            box-shadow: 0 0.8vh 2.5vh rgba(0, 0, 0, 0.55);
+            z-index: 20;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+            font-size: 3.4vh;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0.35vh 0 #000, 0 0 1.5vh rgba(250, 204, 21, 0.4);
+        }
+
+        .brand-sub {
+            font-size: 1.8vh;
+            background: rgba(56, 189, 248, 0.2);
+            border: 0.2vh solid var(--cyan);
+            color: var(--cyan);
+            padding: 0.4vh 0.9vw;
+            border-radius: 2vh;
+            font-weight: 800;
+        }
+
+        /* Marcador central de la partida (Vidas, Puntos, Racha y Ronda) */
+        .hud-stats {
+            display: none;
+            align-items: center;
+            gap: 1.4vw;
+        }
+
+        .hud-stats.visible {
+            display: flex;
+        }
+
+        .hud-pill {
+            background: rgba(15, 23, 42, 0.95);
+            border: 0.3vh solid rgba(255, 255, 255, 0.25);
+            padding: 0.8vh 1.4vw;
+            border-radius: 4vh;
+            display: flex;
+            align-items: center;
+            gap: 0.6vw;
+            font-size: 2.5vh;
+            font-weight: 900;
+            box-shadow: inset 0 0.2vh 0.8vh rgba(0, 0, 0, 0.6);
+        }
+
+        .hud-pill.lives-pill {
+            border-color: #f87171;
+            background: rgba(69, 10, 10, 0.65);
+        }
+
+        .hud-pill.score-pill {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .hud-pill.streak-pill {
+            border-color: var(--orange);
+            color: #fdba74;
+        }
+
+        .hud-pill.round-pill {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* Botones de acción rápida en la esquina superior derecha */
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        .tv-nav-btn {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--white);
+            border: 0.3vh solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5vh;
+            padding: 1vh 1.4vw;
+            font-size: 2.2vh;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.16s ease;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5vw;
+        }
+
+        .tv-nav-btn:hover,
+        .tv-nav-btn:focus {
+            background: var(--gold);
+            color: #090d16;
+            border-color: var(--white);
+            transform: scale(1.07);
+            box-shadow: 0 0 2vh var(--gold-glow);
+        }
+
+        /* ==========================================================================
+           CONTENEDOR PRINCIPAL DE PANTALLAS (89.5vh)
+           ========================================================================== */
+        main {
+            flex: 1;
+            width: 100vw;
+            height: 89.5vh;
+            padding: 2vh 2.5vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: screenAppear 0.3s ease-out;
+        }
+
+        @keyframes screenAppear {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Animación de sacudida cuando se pierde una vida */
+        @keyframes shakeScreen {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-1.2vw); }
+            40% { transform: translateX(1.2vw); }
+            60% { transform: translateX(-0.8vw); }
+            80% { transform: translateX(0.8vw); }
+        }
+
+        .shake {
+            animation: shakeScreen 0.45s ease-in-out;
+        }
+
+        /* ==========================================================================
+           PANTALLA 1: MENÚ DE INICIO PARA SMART TV
+           ========================================================================== */
+        #menuScreen {
+            gap: 2.5vw;
+            align-items: stretch;
+        }
+
+        .menu-col {
+            background: var(--panel-bg);
+            border: 0.35vh solid var(--panel-border);
+            border-radius: 3vh;
+            padding: 2.5vh 2.2vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1.5vh 4vh rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-col-left {
+            flex: 1.15;
+        }
+
+        .menu-col-right {
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 3.1vh;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 1.2vh;
+            display: flex;
+            align-items: center;
+            gap: 0.8vw;
+            text-shadow: 0 0.3vh 0 #000;
+        }
+
+        /* Selector de Temario (Triángulos, Cuadriláteros o Todo Mezclado) */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.3vh;
+        }
+
+        .topic-card {
+            background: rgba(30, 41, 59, 0.85);
+            border: 0.35vh solid rgba(255, 255, 255, 0.22);
+            border-radius: 2.2vh;
+            padding: 1.5vh 1.6vw;
+            color: var(--white);
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1.2vw;
+            transition: all 0.16s ease;
+            outline: none;
+        }
+
+        .topic-card:hover,
+        .topic-card:focus {
+            transform: scale(1.025);
+            border-color: var(--gold);
+            box-shadow: 0 0 2vh var(--gold-glow);
+        }
+
+        .topic-card.selected {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.25) 0%, rgba(30, 58, 138, 0.9) 100%);
+            border-color: var(--gold);
+            box-shadow: 0 0 2.2vh rgba(250, 204, 21, 0.45);
+        }
+
+        .topic-icon {
+            font-size: 5vh;
+            min-width: 4.5vw;
+            text-align: center;
+        }
+
+        .topic-info h3 {
+            font-size: 2.6vh;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.3vh;
+        }
+
+        .topic-info p {
+            font-size: 1.95vh;
+            color: #cbd5e1;
+            line-height: 1.25;
+        }
+
+        /* Configuración de Jugadores, Vidas y Rondas */
+        .config-group {
+            margin-bottom: 1.4vh;
+        }
+
+        .config-label {
+            font-size: 2.1vh;
+            font-weight: 800;
+            color: #93c5fd;
+            margin-bottom: 0.7vh;
+            display: block;
+        }
+
+        .option-row {
+            display: flex;
+            gap: 1vw;
+        }
+
+        .choice-btn {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.85);
+            color: var(--white);
+            border: 0.3vh solid rgba(255, 255, 255, 0.24);
+            border-radius: 1.8vh;
+            padding: 1.2vh 0.8vw;
+            font-size: 2.2vh;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            outline: none;
+        }
+
+        .choice-btn:hover,
+        .choice-btn:focus {
+            border-color: var(--gold);
+            transform: scale(1.04);
+        }
+
+        .choice-btn.selected {
+            background: var(--gold);
+            color: #090d16;
+            border-color: var(--white);
+            box-shadow: 0 0 1.8vh var(--gold-glow);
+        }
+
+        /* Tarjetas de selección de Avatar */
+        .avatars-row {
+            display: flex;
+            gap: 1vw;
+        }
+
+        .avatar-card {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.85);
+            border: 0.28vh solid rgba(56, 189, 248, 0.35);
+            border-radius: 2vh;
+            padding: 1vh 1vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .avatar-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 0.25vh solid rgba(255, 255, 255, 0.35);
+            border-radius: 1.4vh;
+            font-size: 3.8vh;
+            padding: 0.4vh 0.9vw;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .avatar-btn:hover,
+        .avatar-btn:focus {
+            transform: scale(1.12);
+            border-color: var(--gold);
+            background: rgba(250, 204, 21, 0.25);
+        }
+
+        /* Botón Gigante de "¡EMPEZAR A JUGAR!" */
+        .start-game-btn {
+            width: 100%;
+            background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+            color: #052e16;
+            border: 0.45vh solid #ffffff;
+            border-radius: 2.5vh;
+            padding: 2vh;
+            font-size: 3.5vh;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 1vh 0 #14532d, 0 1.5vh 3vh rgba(0, 0, 0, 0.6);
+            transition: all 0.16s ease;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 0.06vw;
+        }
+
+        .start-game-btn:hover,
+        .start-game-btn:focus {
+            transform: scale(1.03) translateY(-0.3vh);
+            background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+            box-shadow: 0 1vh 0 #854d0e, 0 0 3.5vh var(--gold);
+        }
+
+        /* ==========================================================================
+           PANTALLA 2: JUEGO PRINCIPAL (ALTERNANDO MODO NOMBRE Y MODO FIGURA)
+           ========================================================================== */
+        #gameScreen {
+            flex-direction: column;
+            gap: 1.6vh;
+        }
+
+        /* Barra superior de la pregunta actual */
+        .question-banner {
+            background: rgba(15, 23, 42, 0.92);
+            border: 0.35vh solid rgba(56, 189, 248, 0.45);
+            border-radius: 2.4vh;
+            padding: 1.3vh 2vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0.8vh 2.5vh rgba(0, 0, 0, 0.45);
+        }
+
+        .mode-tag {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: #fff;
+            font-weight: 900;
+            font-size: 2.1vh;
+            padding: 0.7vh 1.2vw;
+            border-radius: 1.5vh;
+            border: 0.25vh solid #fff;
+            white-space: nowrap;
+        }
+
+        .mode-tag.pick-figure-mode {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .mode-tag.double-mode {
+            background: linear-gradient(135deg, #10b981, #047857);
+        }
+
+        .question-prompt-box {
+            text-align: center;
+            flex: 1;
+            padding: 0 1.5vw;
+        }
+
+        .question-title {
+            font-size: 3.2vh;
+            font-weight: 900;
+            color: var(--white);
+        }
+
+        .question-title .highlight-term {
+            color: var(--gold);
+            text-decoration: underline;
+            text-underline-offset: 0.5vh;
+        }
+
+        .question-clue {
+            font-size: 2.15vh;
+            color: #bae6fd;
+            margin-top: 0.3vh;
+            font-weight: 700;
+        }
+
+        .hint-btn {
+            background: rgba(250, 204, 21, 0.18);
+            border: 0.3vh solid var(--gold);
+            color: var(--gold);
+            border-radius: 1.6vh;
+            padding: 0.9vh 1.3vw;
+            font-size: 2.1vh;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.16s ease;
+            white-space: nowrap;
+        }
+
+        .hint-btn:hover,
+        .hint-btn:focus {
+            background: var(--gold);
+            color: #090d16;
+            transform: scale(1.07);
+            box-shadow: 0 0 2vh var(--gold-glow);
+        }
+
+        /* Área central cambiante según el tipo de pregunta */
+        .stage-container {
+            flex: 1;
+            display: flex;
+            gap: 2vw;
+            min-height: 0;
+        }
+
+        /* ------------------------------------------------------------------
+           MODO A: ADIVINA EL NOMBRE (Pizarra Grande a la izquierda + 4 Botones)
+           ------------------------------------------------------------------ */
+        #modeGuessNameLayout {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            gap: 2.2vw;
+        }
+
+        .blackboard-panel {
+            flex: 1.15;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 0.45vh solid rgba(148, 163, 184, 0.4);
+            border-radius: 3vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5vh;
+            box-shadow: inset 0 0 4vh rgba(0, 0, 0, 0.75), 0 1vh 3vh rgba(0, 0, 0, 0.5);
+        }
+
+        #mainFigureCanvas {
+            width: 100%;
+            height: 100%;
+            max-height: 54vh;
+            object-fit: contain;
+        }
+
+        .canvas-badge {
+            position: absolute;
+            top: 1.6vh;
+            left: 1.4vw;
+            background: rgba(15, 23, 42, 0.88);
+            border: 0.25vh solid var(--cyan);
+            color: var(--cyan);
+            padding: 0.6vh 1.1vw;
+            border-radius: 1.5vh;
+            font-size: 2vh;
+            font-weight: 800;
+        }
+
+        .canvas-legend {
+            position: absolute;
+            bottom: 1.4vh;
+            left: 1.4vw;
+            right: 1.4vw;
+            background: rgba(9, 13, 22, 0.88);
+            border: 0.25vh solid rgba(250, 204, 21, 0.45);
+            color: #fef08a;
+            padding: 0.8vh 1.2vw;
+            border-radius: 1.5vh;
+            font-size: 2.05vh;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .name-options-panel {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5vh;
+        }
+
+        .name-option-btn {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 0.4vh solid rgba(255, 255, 255, 0.25);
+            border-radius: 2.4vh;
+            padding: 1.4vh 1.8vw;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 1.4vw;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.16s ease;
+            outline: none;
+            box-shadow: 0 0.8vh 2vh rgba(0, 0, 0, 0.4);
+        }
+
+        .name-option-btn:hover,
+        .name-option-btn:focus {
+            border-color: var(--gold);
+            transform: scale(1.03) translateX(0.4vw);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(30, 58, 138, 0.95) 100%);
+            box-shadow: 0 0 2.5vh var(--gold-glow);
+        }
+
+        .opt-number {
+            width: 5.5vh;
+            height: 5.5vh;
+            border-radius: 1.5vh;
+            background: var(--gold);
+            color: #090d16;
+            font-size: 3vh;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .opt-texts {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .opt-main-name {
+            font-size: 3.1vh;
+            font-weight: 900;
+            color: var(--white);
+        }
+
+        .opt-sub-desc {
+            font-size: 1.95vh;
+            color: #cbd5e1;
+            margin-top: 0.2vh;
+        }
+
+        /* ------------------------------------------------------------------
+           MODO B: ELIGE LA FIGURA (Cuadrícula 2x2 de Pizarras con Dibujos)
+           ------------------------------------------------------------------ */
+        #modePickFigureLayout {
+            width: 100%;
+            height: 100%;
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 1.8vh 2vw;
+        }
+
+        .figure-choice-card {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 0.45vh solid rgba(255, 255, 255, 0.28);
+            border-radius: 2.6vh;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1vh;
+            transition: all 0.16s ease;
+            outline: none;
+            box-shadow: 0 0.8vh 2.2vh rgba(0, 0, 0, 0.45);
+        }
+
+        .figure-choice-card:hover,
+        .figure-choice-card:focus {
+            border-color: var(--gold);
+            transform: scale(1.03);
+            box-shadow: 0 0 3vh var(--gold-glow);
+            background: radial-gradient(circle at center, #1e3a8a 0%, #0f172a 100%);
+        }
+
+        .figure-choice-card canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-corner-num {
+            position: absolute;
+            top: 1.2vh;
+            left: 1vw;
+            width: 5vh;
+            height: 5vh;
+            border-radius: 1.4vh;
+            background: var(--gold);
+            color: #090d16;
+            font-size: 2.8vh;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0.4vh 1vh rgba(0, 0, 0, 0.5);
+        }
+
+        .card-reveal-label {
+            position: absolute;
+            bottom: 1.2vh;
+            right: 1vw;
+            left: 1vw;
+            background: rgba(9, 13, 22, 0.9);
+            border: 0.25vh solid rgba(255, 255, 255, 0.25);
+            border-radius: 1.2vh;
+            padding: 0.5vh 0.8vw;
+            font-size: 2.1vh;
+            font-weight: 800;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        /* ------------------------------------------------------------------
+           MODO C: ESPECIAL "PRACTICO DE LA FICHA" (Clasifica LADOS + ÁNGULOS)
+           ------------------------------------------------------------------ */
+        #modeDoubleTriangleLayout {
+            width: 100%;
+            height: 100%;
+            display: none;
+            gap: 2.2vw;
+        }
+
+        .double-Selectors-panel {
+            flex: 1.1;
+            background: var(--panel-bg);
+            border: 0.35vh solid var(--panel-border);
+            border-radius: 3vh;
+            padding: 2vh 1.8vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .double-group-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 0.28vh solid rgba(56, 189, 248, 0.35);
+            border-radius: 2vh;
+            padding: 1.4vh 1.2vw;
+        }
+
+        .double-group-title {
+            font-size: 2.3vh;
+            font-weight: 900;
+            color: var(--cyan);
+            margin-bottom: 1vh;
+        }
+
+        .double-btn-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1vw;
+        }
+
+        .double-pick-btn {
+            background: rgba(30, 41, 59, 0.95);
+            border: 0.35vh solid rgba(255, 255, 255, 0.25);
+            border-radius: 1.8vh;
+            padding: 1.5vh 0.8vw;
+            color: var(--white);
+            font-size: 2.3vh;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .double-pick-btn span {
+            display: block;
+            font-size: 1.7vh;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-top: 0.3vh;
+        }
+
+        .double-pick-btn:hover,
+        .double-pick-btn:focus {
+            border-color: var(--gold);
+            transform: scale(1.04);
+        }
+
+        .double-pick-btn.selected {
+            background: var(--gold);
+            color: #090d16;
+            border-color: var(--white);
+            box-shadow: 0 0 2vh var(--gold-glow);
+        }
+
+        .double-pick-btn.selected span {
+            color: #1e293b;
+            font-weight: 800;
+        }
+
+        .verify-double-btn {
+            background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+            color: #052e16;
+            border: 0.35vh solid #fff;
+            border-radius: 2vh;
+            padding: 1.6vh;
+            font-size: 2.8vh;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.16s ease;
+        }
+
+        .verify-double-btn:hover,
+        .verify-double-btn:focus {
+            transform: scale(1.03);
+            background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+            box-shadow: 0 0 2.5vh var(--gold);
+        }
+
+        /* Estados de acierto y fallo en botones/tarjetas */
+        .correct-choice {
+            border-color: var(--green) !important;
+            background: rgba(22, 163, 74, 0.38) !important;
+            box-shadow: 0 0 3.5vh rgba(34, 197, 94, 0.85) !important;
+        }
+
+        .wrong-choice {
+            border-color: var(--red) !important;
+            background: rgba(220, 38, 38, 0.38) !important;
+            box-shadow: 0 0 3vh rgba(239, 68, 68, 0.8) !important;
+        }
+
+        /* Barra inferior de estado y turno de jugadores */
+        .bottom-status-bar {
+            height: 8.5vh;
+            background: rgba(9, 13, 22, 0.9);
+            border: 0.3vh solid rgba(255, 255, 255, 0.18);
+            border-radius: 2.2vh;
+            padding: 0 2vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .player-turn-box {
+            display: flex;
+            align-items: center;
+            gap: 1.5vw;
+        }
+
+        .player-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.7vw;
+            padding: 0.6vh 1.2vw;
+            border-radius: 1.6vh;
+            background: rgba(30, 41, 59, 0.7);
+            border: 0.25vh solid transparent;
+            font-size: 2.2vh;
+            font-weight: 800;
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .player-badge.active-turn {
+            opacity: 1;
+            border-color: var(--gold);
+            background: rgba(250, 204, 21, 0.18);
+            box-shadow: 0 0 1.8vh rgba(250, 204, 21, 0.35);
+            transform: scale(1.04);
+        }
+
+        .feedback-msg {
+            font-size: 2.5vh;
+            font-weight: 900;
+            color: var(--gold);
+            text-align: center;
+            flex: 1;
+        }
+
+        .next-question-btn {
+            display: none;
+            background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+            color: #090d16;
+            border: 0.35vh solid #ffffff;
+            border-radius: 1.6vh;
+            padding: 1vh 2vw;
+            font-size: 2.4vh;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 0 2.5vh var(--gold);
+            animation: pulseNext 1s infinite alternate;
+        }
+
+        @keyframes pulseNext {
+            from { transform: scale(1); }
+            to { transform: scale(1.07); }
+        }
+
+        /* ==========================================================================
+           PANTALLA 3: CHULETA INTERACTIVA (LAS DOS HOJAS DEL COLEGIO EN LA TELE)
+           ========================================================================== */
+        #studyScreen {
+            flex-direction: column;
+            gap: 1.8vh;
+        }
+
+        .study-tabs {
+            display: flex;
+            gap: 1.5vw;
+            justify-content: center;
+        }
+
+        .study-tab-btn {
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--white);
+            border: 0.35vh solid rgba(255, 255, 255, 0.25);
+            border-radius: 2vh;
+            padding: 1.2vh 2.5vw;
+            font-size: 2.5vh;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .study-tab-btn.active,
+        .study-tab-btn:hover,
+        .study-tab-btn:focus {
+            background: var(--gold);
+            color: #090d16;
+            border-color: var(--white);
+            box-shadow: 0 0 2vh var(--gold-glow);
+        }
+
+        .study-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5vh 1.5vw;
+            min-height: 0;
+        }
+
+        .study-card {
+            background: rgba(15, 23, 42, 0.88);
+            border: 0.3vh solid rgba(56, 189, 248, 0.35);
+            border-radius: 2.2vh;
+            padding: 1.2vh 1vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.16s;
+        }
+
+        .study-card:hover,
+        .study-card:focus {
+            border-color: var(--gold);
+            transform: scale(1.03);
+            box-shadow: 0 0 2.2vh var(--gold-glow);
+        }
+
+        .study-card canvas {
+            width: 100%;
+            height: 16vh;
+            object-fit: contain;
+        }
+
+        .study-card-cat {
+            font-size: 1.65vh;
+            font-weight: 800;
+            color: var(--cyan);
+            background: rgba(56, 189, 248, 0.15);
+            padding: 0.3vh 0.8vw;
+            border-radius: 1vh;
+        }
+
+        .study-card-title {
+            font-size: 2.4vh;
+            font-weight: 900;
+            color: var(--gold);
+            text-align: center;
+        }
+
+        .study-card-desc {
+            font-size: 1.75vh;
+            color: #e2e8f0;
+            text-align: center;
+            line-height: 1.25;
+        }
+
+        /* ==========================================================================
+           PANTALLA 4: FIN DE PARTIDA / PODIO Y RESUMEN
+           ========================================================================== */
+        #resultScreen {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-box {
+            width: 72vw;
+            background: var(--panel-bg);
+            border: 0.45vh solid var(--gold);
+            border-radius: 3.5vh;
+            padding: 4vh 4vw;
+            text-align: center;
+            box-shadow: 0 0 5vh rgba(250, 204, 21, 0.35);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.2vh;
+        }
+
+        .result-trophy {
+            font-size: 10vh;
+        }
+
+        .result-headline {
+            font-size: 4.6vh;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0.4vh 0 #000;
+        }
+
+        .result-sub {
+            font-size: 2.6vh;
+            color: #e2e8f0;
+        }
+
+        .result-stats-row {
+            display: flex;
+            gap: 2.5vw;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .result-stat-card {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.9);
+            border: 0.3vh solid rgba(255, 255, 255, 0.22);
+            border-radius: 2.2vh;
+            padding: 2vh 1.5vw;
+        }
+
+        .result-stat-card h4 {
+            font-size: 2.2vh;
+            color: var(--cyan);
+            margin-bottom: 0.6vh;
+        }
+
+        .result-stat-card .big-val {
+            font-size: 4.2vh;
+            font-weight: 900;
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         CABECERA SUPERIOR PANORÁMICA
+         ========================================================================== -->
+    <header>
+        <div class="brand-logo">
+            <span>📐 ¡SUPER GEOMETRÍA TV!</span>
+            <span class="brand-sub">Triángulos y Cuadriláteros · 9 Años</span>
+        </div>
+
+        <!-- Marcadores en vivo durante la partida -->
+        <div id="hudStats" class="hud-stats">
+            <div class="hud-pill lives-pill" title="Vidas restantes">
+                <span id="hudLives">❤️❤️❤️</span>
+            </div>
+            <div class="hud-pill score-pill" title="Puntuación total">
+                <span>⭐</span>
+                <span id="hudScore">0</span>
+            </div>
+            <div class="hud-pill streak-pill" title="Racha de aciertos seguidos">
+                <span>🔥 x</span><span id="hudStreak">0</span>
+            </div>
+            <div class="hud-pill round-pill" title="Pregunta actual">
+                <span>🎯</span>
+                <span id="hudRound">1 / 12</span>
+            </div>
+        </div>
+
+        <!-- Botones de navegación para el mando de la tele -->
+        <div class="top-actions">
+            <button class="tv-nav-btn" id="btnOpenStudy" onclick="openStudyScreen()">
+                📖 Chuleta de la Ficha
+            </button>
+            <button class="tv-nav-btn" id="btnToggleSound" onclick="toggleSound()">
+                🔊 Sonido: SÍ
+            </button>
+            <button class="tv-nav-btn" id="btnBackMenu" onclick="goToMenu()" style="display:none;">
+                🏠 Menú
+            </button>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         CONTENEDOR PRINCIPAL DE LAS 4 PANTALLAS DE LA APLICACIÓN
+         ========================================================================== -->
+    <main id="mainWrapper">
+
+        <!-- ======================================================================
+             PANTALLA 1: MENÚ DE CONFIGURACIÓN DE LA PARTIDA
+             ====================================================================== -->
+        <section id="menuScreen" class="screen active">
+            <!-- Columna Izquierda: Elección de Temario de las fichas escolares -->
+            <div class="menu-col menu-col-left">
+                <div>
+                    <div class="section-title">📚 1. ¿Qué fichas quieres practicar hoy?</div>
+                    <div class="topic-grid">
+                        <button class="topic-card selected" id="topicAll" onclick="selectTopic('all')">
+                            <div class="topic-icon">🌟</div>
+                            <div class="topic-info">
+                                <h3>¡Todo Mezclado! (Las 2 Fichas Completas)</h3>
+                                <p>Triángulos (lados y ángulos) + Cuadriláteros (paralelogramos, trapecios y trapezoides).</p>
+                            </div>
+                        </button>
+
+                        <button class="topic-card" id="topicTriangles" onclick="selectTopic('triangles')">
+                            <div class="topic-icon">🔺</div>
+                            <div class="topic-info">
+                                <h3>Hoja 1: Clasificación de Triángulos</h3>
+                                <p>Equilátero, Isósceles, Escaleno · Rectángulo, Acutángulo, Obtusángulo + Tabla Práctica.</p>
+                            </div>
+                        </button>
+
+                        <button class="topic-card" id="topicQuads" onclick="selectTopic('quads')">
+                            <div class="topic-icon">🔷</div>
+                            <div class="topic-info">
+                                <h3>Hoja 2: Clasificación de Cuadriláteros</h3>
+                                <p>Cuadrado, Rectángulo, Rombo, Romboide · Trapecio (rectángulo, isósceles, escaleno) · Trapezoide.</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(56,189,248,0.12); border: 0.25vh solid rgba(56,189,248,0.35); border-radius: 2vh; padding: 1.3vh 1.4vw; font-size: 2vh; color: #bae6fd;">
+                    🎮 <strong>¡Juego Alterno en TV!</strong> En una pregunta verás la <strong>figura dibujada</strong> y elegirás su <strong>nombre</strong>; en la siguiente te diremos el <strong>nombre</strong> y tendrás que encontrar el <strong>dibujo correcto</strong>.
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Jugadores, Vidas, Rondas y Botón de Empezar -->
+            <div class="menu-col menu-col-right">
+                <div>
+                    <div class="section-title">⚙️ 2. Configura tu Partida en la TV</div>
+
+                    <!-- Número de Jugadores -->
+                    <div class="config-group">
+                        <span class="config-label">👥 Modo de Jugadores (Elige tu avatar con un clic):</span>
+                        <div class="option-row" style="margin-bottom: 1vh;">
+                            <button class="choice-btn selected" id="mode1P" onclick="selectPlayers(1)">👤 1 Jugador (Reto)</button>
+                            <button class="choice-btn" id="mode2P" onclick="selectPlayers(2)">👥 2 Jugadores (Turnos)</button>
+                        </div>
+                        <div class="avatars-row">
+                            <div class="avatar-card">
+                                <div>
+                                    <div style="font-weight:900; color:var(--gold);">Jugador 1</div>
+                                    <div style="font-size:1.7vh; color:#94a3b8;">Pulsa el animal</div>
+                                </div>
+                                <button class="avatar-btn" id="p1AvatarBtn" onclick="cycleAvatar(1)">🦊</button>
+                            </div>
+                            <div class="avatar-card" id="p2AvatarCard" style="opacity: 0.45;">
+                                <div>
+                                    <div style="font-weight:900; color:var(--cyan);">Jugador 2</div>
+                                    <div style="font-size:1.7vh; color:#94a3b8;">Pulsa el animal</div>
+                                </div>
+                                <button class="avatar-btn" id="p2AvatarBtn" onclick="cycleAvatar(2)">🐼</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Número de Vidas -->
+                    <div class="config-group">
+                        <span class="config-label">❤️ Vidas Iniciales:</span>
+                        <div class="option-row">
+                            <button class="choice-btn" id="lives3" onclick="selectLives(3)">❤️❤️❤️ (3)</button>
+                            <button class="choice-btn selected" id="lives5" onclick="selectLives(5)">❤️❤️❤️❤️❤️ (5)</button>
+                            <button class="choice-btn" id="lives99" onclick="selectLives(99)">♾️ Infinitas</button>
+                        </div>
+                    </div>
+
+                    <!-- Número de Preguntas -->
+                    <div class="config-group">
+                        <span class="config-label">🎯 Duración de la Partida:</span>
+                        <div class="option-row">
+                            <button class="choice-btn" id="rounds10" onclick="selectRounds(10)">⚡ 10 Rondas</button>
+                            <button class="choice-btn selected" id="rounds14" onclick="selectRounds(14)">🏆 14 Rondas</button>
+                            <button class="choice-btn" id="rounds20" onclick="selectRounds(20)">👑 20 Rondas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-game-btn" onclick="startGame()">
+                    🚀 ¡EMPEZAR EL JUEGO!
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             PANTALLA 2: TABLERO DE JUEGO (ALTERNA NOMBRE ↔ FIGURA + TABLA PRÁCTICA)
+             ====================================================================== -->
+        <section id="gameScreen" class="screen">
+            <!-- Banner superior con el enunciado de la ronda -->
+            <div class="question-banner">
+                <div id="questionModeBadge" class="mode-tag">RONDA 1 · ADIVINA EL NOMBRE</div>
+                <div class="question-prompt-box">
+                    <div id="questionTitle" class="question-title">¿Cómo se llama esta figura geométrica?</div>
+                    <div id="questionClue" class="question-clue">Fíjate bien en sus lados y en sus ángulos.</div>
+                </div>
+                <button class="hint-btn" id="btnUseHint" onclick="triggerVisualHint()">
+                    💡 Pista del Profe
+                </button>
+            </div>
+
+            <!-- Escenario central dinámico -->
+            <div class="stage-container">
+
+                <!-- MODO A (Rondas Impares): Se muestra 1 figura grande y se elige entre 4 nombres -->
+                <div id="modeGuessNameLayout">
+                    <div class="blackboard-panel">
+                        <div id="canvasCategoryBadge" class="canvas-badge">TRIÁNGULOS</div>
+                        <canvas id="mainFigureCanvas" width="760" height="440"></canvas>
+                        <div id="canvasLegendBox" class="canvas-legend">
+                            👀 Observa las marcas de lados iguales y los ángulos marcados.
+                        </div>
+                    </div>
+                    <div id="nameOptionsContainer" class="name-options-panel">
+                        <!-- Los 4 botones de nombres se inyectan dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- MODO B (Rondas Pares): Se dice el nombre de la figura y se elige entre 4 dibujos -->
+                <div id="modePickFigureLayout">
+                    <!-- Las 4 pizarras interactivas con figuras se inyectan dinámicamente -->
+                </div>
+
+                <!-- MODO C (Especial Tabla Práctica de la Hoja 1): Clasifica Triángulo por Lados Y Ángulos -->
+                <div id="modeDoubleTriangleLayout">
+                    <div class="blackboard-panel" style="flex: 1;">
+                        <div class="canvas-badge">⭐ PRACTICO DE LA FICHA (DOBLE CLASIFICACIÓN)</div>
+                        <canvas id="doubleTriangleCanvas" width="700" height="420"></canvas>
+                        <div id="doubleLegendBox" class="canvas-legend">
+                            Elige cómo es este triángulo según sus LADOS y según sus ÁNGULOS.
+                        </div>
+                    </div>
+                    <div class="double-Selectors-panel">
+                        <div class="double-group-box">
+                            <div class="double-group-title">📏 1. Según la longitud de sus LADOS:</div>
+                            <div class="double-btn-row">
+                                <button class="double-pick-btn" id="dblSide_equilatero" onclick="selectDoubleOption('side','equilatero')">
+                                    Equilátero
+                                    <span>3 lados iguales</span>
+                                </button>
+                                <button class="double-pick-btn" id="dblSide_isosceles" onclick="selectDoubleOption('side','isosceles')">
+                                    Isósceles
+                                    <span>2 lados iguales</span>
+                                </button>
+                                <button class="double-pick-btn" id="dblSide_escaleno" onclick="selectDoubleOption('side','escaleno')">
+                                    Escaleno
+                                    <span>Ningún lado igual</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="double-group-box">
+                            <div class="double-group-title">📐 2. Según la amplitud de sus ÁNGULOS:</div>
+                            <div class="double-btn-row">
+                                <button class="double-pick-btn" id="dblAng_acutangulo" onclick="selectDoubleOption('angle','acutangulo')">
+                                    Acutángulo
+                                    <span>3 ángulos agudos</span>
+                                </button>
+                                <button class="double-pick-btn" id="dblAng_rectangulo" onclick="selectDoubleOption('angle','rectangulo')">
+                                    Rectángulo
+                                    <span>1 ángulo recto (90º)</span>
+                                </button>
+                                <button class="double-pick-btn" id="dblAng_obtusangulo" onclick="selectDoubleOption('angle','obtusangulo')">
+                                    Obtusángulo
+                                    <span>1 ángulo obtuso</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="verify-double-btn" id="btnVerifyDouble" onclick="checkDoubleTriangleAnswer()">
+                            ✅ ¡COMPROBAR LADOS Y ÁNGULOS!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra inferior con turno de jugador, mensaje educativo y botón Siguiente -->
+            <div class="bottom-status-bar">
+                <div class="player-turn-box">
+                    <div class="player-badge active-turn" id="badgeP1">
+                        <span id="turnAvatarP1">🦊</span>
+                        <span>J1: <strong id="scoreP1">0</strong> pts</span>
+                    </div>
+                    <div class="player-badge" id="badgeP2" style="display:none;">
+                        <span id="turnAvatarP2">🐼</span>
+                        <span>J2: <strong id="scoreP2">0</strong> pts</span>
+                    </div>
+                </div>
+
+                <div id="feedbackMessage" class="feedback-msg">
+                    🎯 ¡Apunta con el mando de la tele o usa los botones 1, 2, 3, 4!
+                </div>
+
+                <button id="btnNextQuestion" class="next-question-btn" onclick="nextQuestion()">
+                    SIGUIENTE RONDITA ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             PANTALLA 3: CHULETA INTERACTIVA (REPASO DE LAS 2 FICHAS ESCOLARES)
+             ====================================================================== -->
+        <section id="studyScreen" class="screen">
+            <div class="study-tabs">
+                <button class="study-tab-btn active" id="tabStudyTri" onclick="renderStudyCatalog('triangles')">
+                    🔺 Hoja 1: Clasificación de Triángulos (6 tipos)
+                </button>
+                <button class="study-tab-btn" id="tabStudyQuad" onclick="renderStudyCatalog('quads')">
+                    🔷 Hoja 2: Clasificación de Cuadriláteros (8 tipos)
+                </button>
+            </div>
+
+            <div id="studyGridContainer" class="study-grid">
+                <!-- Se rellena con tarjetas interactivas que hablan y suenan al hacer clic -->
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             PANTALLA 4: RESULTADO FINAL DE LA PARTIDA
+             ====================================================================== -->
+        <section id="resultScreen" class="screen">
+            <div class="result-box">
+                <div id="resultTrophy" class="result-trophy">🏆</div>
+                <div id="resultHeadline" class="result-headline">¡PARTIDA COMPLETADA!</div>
+                <div id="resultSubtitle" class="result-sub">¡Te sabes las fichas de Geometría al dedillo!</div>
+
+                <div id="resultStatsRow" class="result-stats-row">
+                    <!-- Estadísticas finales insertadas por JS -->
+                </div>
+
+                <div style="display:flex; gap: 2vw; width: 100%; margin-top: 1vh;">
+                    <button class="start-game-btn" style="flex:1;" onclick="startGame()">
+                        🔄 ¡JUGAR OTRA VEZ!
+                    </button>
+                    <button class="tv-nav-btn" style="flex:0.6; justify-content:center; font-size:2.8vh;" onclick="goToMenu()">
+                        🏠 Cambiar Opciones
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+         BLOQUE 2: LÓGICA JAVASCRIPT CON COMENTARIOS EXPLICATIVOS DETALLADOS
+         ========================================================================== -->
+    <script>
+        /* ==========================================================================
+           SECCIÓN 1: BASE DE DATOS DE FIGURAS (EXACTA A LAS 2 FICHAS ESCOLARES)
+           --------------------------------------------------------------------------
+           Contiene todos los términos de las dos fotos subidas:
+           - Hoja 1: Clasificación de Triángulos (según lados y según ángulos)
+           - Hoja 2: Clasificación de Cuadriláteros (Paralelogramos, Trapecios, Trapezoides)
+           ========================================================================== */
+        const SHAPES_DB = [
+            // --- HOJA 1: TRIÁNGULOS SEGÚN LA LONGITUD DE SUS LADOS ---
+            {
+                id: 'tri_equilatero',
+                name: 'Triángulo Equilátero',
+                shortName: 'Equilátero',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus LADOS',
+                definition: 'Tres lados miden lo mismo.',
+                visualHint: 'Tiene las 3 rayitas iguales: sus 3 lados son idénticos.',
+                soundType: 'chord_equal'
+            },
+            {
+                id: 'tri_isosceles',
+                name: 'Triángulo Isósceles',
+                shortName: 'Isósceles',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus LADOS',
+                definition: 'Dos lados miden lo mismo.',
+                visualHint: 'Tiene 2 lados largos iguales (con rayita) y la base diferente.',
+                soundType: 'two_equal'
+            },
+            {
+                id: 'tri_escaleno',
+                name: 'Triángulo Escaleno',
+                shortName: 'Escaleno',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus LADOS',
+                definition: 'Ningún lado mide lo mismo.',
+                visualHint: 'Sus 3 lados tienen medidas distintas (1, 2 y 3 rayitas).',
+                soundType: 'steps_diff'
+            },
+
+            // --- HOJA 1: TRIÁNGULOS SEGÚN LA AMPLITUD DE SUS ÁNGULOS ---
+            {
+                id: 'tri_rectangulo',
+                name: 'Triángulo Rectángulo',
+                shortName: 'Rectángulo (Triángulo)',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus ÁNGULOS',
+                definition: 'Un ángulo recto (90º).',
+                visualHint: 'Fíjate en la esquina cuadrada verde de 90º (ángulo recto).',
+                soundType: 'right_corner'
+            },
+            {
+                id: 'tri_acutangulo',
+                name: 'Triángulo Acutángulo',
+                shortName: 'Acutángulo',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus ÁNGULOS',
+                definition: 'Tres ángulos agudos (menores de 90º).',
+                visualHint: 'Sus 3 picos son cerraditos (todos miden menos de 90º).',
+                soundType: 'high_acute'
+            },
+            {
+                id: 'tri_obtusangulo',
+                name: 'Triángulo Obtusángulo',
+                shortName: 'Obtusángulo',
+                family: 'triangles',
+                subGroup: 'Triángulo según sus ÁNGULOS',
+                definition: 'Un ángulo obtuso (mayor de 90º).',
+                visualHint: 'Tiene un ángulo muy abierto (naranja, más de 90º).',
+                soundType: 'low_obtuse'
+            },
+
+            // --- HOJA 2: CUADRILÁTEROS PARALELOGRAMOS (Lados paralelos dos a dos) ---
+            {
+                id: 'cuad_cuadrado',
+                name: 'Cuadrado',
+                shortName: 'Cuadrado',
+                family: 'quads',
+                subGroup: 'Paralelogramo (lados paralelos 2 a 2)',
+                definition: '4 lados iguales y 4 ángulos rectos.',
+                visualHint: 'Paralelogramo perfecto: 4 lados iguales y 4 esquinas rectas de 90º.',
+                soundType: 'square_4'
+            },
+            {
+                id: 'cuad_rectangulo',
+                name: 'Rectángulo',
+                shortName: 'Rectángulo',
+                family: 'quads',
+                subGroup: 'Paralelogramo (lados paralelos 2 a 2)',
+                definition: 'Lados iguales dos a dos y 4 ángulos rectos.',
+                visualHint: 'Paralelogramo alargado: 4 esquinas rectas (90º) y lados iguales 2 a 2.',
+                soundType: 'rect_2x2'
+            },
+            {
+                id: 'cuad_rombo',
+                name: 'Rombo',
+                shortName: 'Rombo',
+                family: 'quads',
+                subGroup: 'Paralelogramo (lados paralelos 2 a 2)',
+                definition: '4 lados iguales y ángulos iguales dos a dos.',
+                visualHint: 'Como una cometa simétrica: 4 lados iguales, pero sus ángulos no son rectos.',
+                soundType: 'diamond_arp'
+            },
+            {
+                id: 'cuad_romboide',
+                name: 'Romboide',
+                shortName: 'Romboide',
+                family: 'quads',
+                subGroup: 'Paralelogramo (lados paralelos 2 a 2)',
+                definition: 'Lados y ángulos iguales dos a dos.',
+                visualHint: 'Parece un rectángulo inclinado: lados y ángulos iguales dos a dos.',
+                soundType: 'slant_slide'
+            },
+
+            // --- HOJA 2: CUADRILÁTEROS TRAPECIOS (Sólo tienen dos lados paralelos) ---
+            {
+                id: 'cuad_trap_rectangulo',
+                name: 'Trapecio Rectángulo',
+                shortName: 'Trapecio rectángulo',
+                family: 'quads',
+                subGroup: 'Trapecio (sólo 2 lados paralelos)',
+                definition: 'Sólo 2 lados paralelos y un lado perpendicular (con ángulos rectos).',
+                visualHint: 'Tiene techo y suelo paralelos y la pared izquierda totalmente recta (90º).',
+                soundType: 'trap_right'
+            },
+            {
+                id: 'cuad_trap_isosceles',
+                name: 'Trapecio Isósceles',
+                shortName: 'Trapecio isósceles',
+                family: 'quads',
+                subGroup: 'Trapecio (sólo 2 lados paralelos)',
+                definition: 'Sólo 2 lados paralelos y los lados no paralelos son iguales.',
+                visualHint: 'Techo y suelo paralelos, y las dos rampas laterales miden exactamente igual.',
+                soundType: 'trap_sym'
+            },
+            {
+                id: 'cuad_trap_escaleno',
+                name: 'Trapecio Escaleno',
+                shortName: 'Trapecio escaleno',
+                family: 'quads',
+                subGroup: 'Trapecio (sólo 2 lados paralelos)',
+                definition: 'Sólo 2 lados paralelos y los lados no paralelos son desiguales y sin ángulos rectos.',
+                visualHint: 'Techo y suelo paralelos, pero sus dos lados inclinados son distintos.',
+                soundType: 'trap_asym'
+            },
+
+            // --- HOJA 2: CUADRILÁTEROS TRAPEZOIDES (Sin lados paralelos) ---
+            {
+                id: 'cuad_trapezoide',
+                name: 'Trapezoide',
+                shortName: 'Trapezoide',
+                family: 'quads',
+                subGroup: 'Trapezoide (ningún lado paralelo)',
+                definition: 'Los lados no son paralelos (no tiene ningún lado paralelo).',
+                visualHint: 'Cuadrilátero asimétrico donde ningún lado es paralelo a otro.',
+                soundType: 'quirky_4'
+            }
+        ];
+
+        /* ==========================================================================
+           BASE DE DATOS DEL EJERCICIO "PRACTICO" DE LA HOJA 1 (LADOS + ÁNGULOS)
+           --------------------------------------------------------------------------
+           Incluye los 4 triángulos de la tabla inferior de la primera hoja más 2 extra.
+           ========================================================================== */
+        const DOUBLE_TRIANGLES_DB = [
+            {
+                id: 'prac_1',
+                title: 'Triángulo 1 de la Ficha',
+                sideAnswer: 'equilatero',
+                angleAnswer: 'acutangulo',
+                drawId: 'dbl_equi_acut',
+                explanation: 'Tiene los 3 lados iguales (Equilátero) y sus 3 ángulos son agudos de 60º (Acutángulo).'
+            },
+            {
+                id: 'prac_2',
+                title: 'Triángulo 2 de la Ficha',
+                sideAnswer: 'escaleno',
+                angleAnswer: 'rectangulo',
+                drawId: 'dbl_esc_rect',
+                explanation: 'Tiene sus 3 lados distintos (Escaleno) y una esquina cuadrada de 90º (Rectángulo).'
+            },
+            {
+                id: 'prac_3',
+                title: 'Triángulo 3 de la Ficha (Invertido)',
+                sideAnswer: 'isosceles',
+                angleAnswer: 'obtusangulo',
+                drawId: 'dbl_iso_obt',
+                explanation: 'Tiene 2 lados iguales arriba (Isósceles) y el ángulo inferior muy abierto > 90º (Obtusángulo).'
+            },
+            {
+                id: 'prac_4',
+                title: 'Triángulo 4 de la Ficha',
+                sideAnswer: 'escaleno',
+                angleAnswer: 'obtusangulo',
+                drawId: 'dbl_esc_obt',
+                explanation: 'Sus 3 lados miden diferente (Escaleno) y el ángulo superior es muy abierto > 90º (Obtusángulo).'
+            },
+            {
+                id: 'prac_5',
+                title: 'Triángulo Clásico de Escuadra',
+                sideAnswer: 'isosceles',
+                angleAnswer: 'rectangulo',
+                drawId: 'dbl_iso_rect',
+                explanation: 'Tiene 2 lados iguales formando la esquina de 90º: es Isósceles y Rectángulo.'
+            }
+        ];
+
+        /* ==========================================================================
+           SECCIÓN 2: SINTETIZADOR DE SONIDOS WEB AUDIO API (SIN ARCHIVOS EXTERNOS)
+           --------------------------------------------------------------------------
+           Genera efectos musicales divertidos para aciertos, fallos, combos y cada
+           tipo de figura geométrica directamente en los altavoces del televisor LG.
+           ========================================================================== */
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function ensureAudio() {
+            if (!soundEnabled) return null;
+            if (!audioCtx) {
+                const AudioConstructor = window.AudioContext || window.webkitAudioContext;
+                if (AudioConstructor) audioCtx = new AudioConstructor();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Función auxiliar para tocar una nota musical sintetizada
+        function playTone(freq, type, duration, delay = 0, vol = 0.22, slideTo = null) {
+            const ctx = ensureAudio();
+            if (!ctx) return;
+
+            const start = ctx.currentTime + delay;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, start);
+            if (slideTo) {
+                osc.frequency.exponentialRampToValueAtTime(slideTo, start + duration);
+            }
+
+            gain.gain.setValueAtTime(0.001, start);
+            gain.gain.linearRampToValueAtTime(vol, start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(start);
+            osc.stop(start + duration + 0.02);
+        }
+
+        // Sonido corto al mover el puntero del mando LG o cambiar opción
+        function playClickSound() {
+            playTone(520, 'sine', 0.08, 0, 0.12, 660);
+        }
+
+        // Fanfarria alegre cuando el niño acierta (sube de tono con la racha)
+        function playSuccessSound(streak = 1) {
+            const boost = Math.min(streak * 35, 220);
+            playTone(523.25 + boost, 'triangle', 0.13, 0, 0.25);
+            playTone(659.25 + boost, 'triangle', 0.13, 0.11, 0.25);
+            playTone(783.99 + boost, 'triangle', 0.15, 0.22, 0.26);
+            playTone(1046.50 + boost, 'sine', 0.35, 0.33, 0.30);
+        }
+
+        // Sonido cómico cuando pierde una vida
+        function playWrongSound() {
+            playTone(310, 'sawtooth', 0.22, 0, 0.2, 220);
+            playTone(215, 'sawtooth', 0.38, 0.22, 0.22, 130);
+        }
+
+        // Sonido mágico al pedir la "Pista del Profe"
+        function playHintSound() {
+            playTone(587.33, 'sine', 0.12, 0, 0.18);
+            playTone(880, 'sine', 0.2, 0.1, 0.22);
+            playTone(1174.66, 'sine', 0.28, 0.2, 0.22);
+        }
+
+        // Melodía personalizada según la figura geométrica para reforzar la memoria auditiva
+        function playShapeSignatureSound(soundType) {
+            switch (soundType) {
+                case 'chord_equal': // 3 notas iguales brillantes (Equilátero)
+                    playTone(659, 'triangle', 0.12, 0, 0.22);
+                    playTone(659, 'triangle', 0.12, 0.14, 0.22);
+                    playTone(659, 'triangle', 0.22, 0.28, 0.25);
+                    break;
+                case 'two_equal': // 2 notas iguales y 1 distinta (Isósceles)
+                    playTone(740, 'triangle', 0.14, 0, 0.22);
+                    playTone(740, 'triangle', 0.14, 0.16, 0.22);
+                    playTone(523, 'sine', 0.24, 0.32, 0.24);
+                    break;
+                case 'steps_diff': // 3 notas de distinta altura (Escaleno)
+                    playTone(440, 'triangle', 0.13, 0, 0.22);
+                    playTone(622, 'triangle', 0.13, 0.15, 0.22);
+                    playTone(880, 'triangle', 0.22, 0.30, 0.24);
+                    break;
+                case 'right_corner': // Esquina cuadrada 90º
+                    playTone(440, 'square', 0.12, 0, 0.18);
+                    playTone(880, 'square', 0.24, 0.14, 0.18);
+                    break;
+                case 'high_acute': // Agudo cristalino
+                    playTone(1046, 'sine', 0.12, 0, 0.22, 1396);
+                    playTone(1396, 'sine', 0.2, 0.13, 0.22);
+                    break;
+                case 'low_obtuse': // Obtuso grave y ancho
+                    playTone(240, 'sawtooth', 0.25, 0, 0.22, 180);
+                    break;
+                case 'square_4': // 4 pulsos iguales (Cuadrado)
+                    [0, 0.11, 0.22, 0.33].forEach(d => playTone(587, 'square', 0.09, d, 0.16));
+                    break;
+                default:
+                    playTone(523, 'triangle', 0.14, 0, 0.2);
+                    playTone(659, 'triangle', 0.2, 0.14, 0.22);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btnToggleSound');
+            btn.textContent = soundEnabled ? '🔊 Sonido: SÍ' : '🔇 Sonido: NO';
+            if (soundEnabled) playClickSound();
+        }
+
+        /* ==========================================================================
+           SECCIÓN 3: MOTOR GRÁFICO GEOMÉTRICO EN CANVAS (COMPATIBLE CON LG webOS)
+           --------------------------------------------------------------------------
+           Dibuja cada triángulo y cuadrilátero con colores vivos, marcas de lados
+           iguales (rayitas), cuadraditos verdes de ángulo recto (90º), arcos de
+           ángulos y flechas de paralelismo.
+           ========================================================================== */
+
+        // Dibuja marcas de lados iguales (1, 2 o 3 rayitas transversales en el centro del segmento)
+        function drawSideTicks(ctx, x1, y1, x2, y2, count, color = '#facc15') {
+            const mx = (x1 + x2) / 2;
+            const my = (y1 + y2) / 2;
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const len = Math.hypot(dx, dy);
+            if (len === 0) return;
+
+            // Vector unitario paralelo y normal al lado
+            const ux = dx / len;
+            const uy = dy / len;
+            const nx = -uy;
+            const ny = ux;
+
+            const tickHalf = 11;
+            const spacing = 8;
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+
+            const startOffset = -((count - 1) * spacing) / 2;
+            for (let i = 0; i < count; i++) {
+                const offset = startOffset + i * spacing;
+                const cx = mx + ux * offset;
+                const cy = my + uy * offset;
+                ctx.beginPath();
+                ctx.moveTo(cx - nx * tickHalf, cy - ny * tickHalf);
+                ctx.lineTo(cx + nx * tickHalf, cy + ny * tickHalf);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // Dibuja el símbolo de ángulo recto (cuadradito verde de 90º) en un vértice
+        function drawRightAngleMark(ctx, vx, vy, p1x, p1y, p2x, p2y, size = 24) {
+            const d1 = Math.hypot(p1x - vx, p1y - vy);
+            const d2 = Math.hypot(p2x - vx, p2y - vy);
+            if (!d1 || !d2) return;
+
+            const u1x = (p1x - vx) / d1;
+            const u1y = (p1y - vy) / d1;
+            const u2x = (p2x - vx) / d2;
+            const u2y = (p2y - vy) / d2;
+
+            const aX = vx + u1x * size;
+            const aY = vy + u1y * size;
+            const bX = vx + u2x * size;
+            const bY = vy + u2y * size;
+            const cX = vx + u1x * size + u2x * size;
+            const cY = vy + u1y * size + u2y * size;
+
+            ctx.save();
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.45)';
+            ctx.strokeStyle = '#4ade80';
+            ctx.lineWidth = 3.5;
+
+            ctx.beginPath();
+            ctx.moveTo(vx, vy);
+            ctx.lineTo(aX, aY);
+            ctx.lineTo(cX, cY);
+            ctx.lineTo(bX, bY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Puntito central
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc((vx + cX) / 2, (vy + cY) / 2, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Dibuja un arco de ángulo coloreado en un vértice interior
+        function drawAngleArc(ctx, vx, vy, p1x, p1y, p2x, p2y, radius, color, label = '') {
+            const ang1 = Math.atan2(p1y - vy, p1x - vx);
+            const ang2 = Math.atan2(p2y - vy, p2x - vx);
+
+            let diff = ang2 - ang1;
+            while (diff <= -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+
+            const anticlockwise = diff < 0;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(vx, vy);
+            ctx.arc(vx, vy, radius, ang1, ang2, anticlockwise);
+            ctx.closePath();
+            ctx.fillStyle = color + '44';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(vx, vy, radius, ang1, ang2, anticlockwise);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3.5;
+            ctx.stroke();
+
+            if (label) {
+                const midAng = ang1 + diff / 2;
+                const tx = vx + Math.cos(midAng) * (radius + 22);
+                const ty = vy + Math.sin(midAng) * (radius + 22);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 18px "Segoe UI", Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(label, tx, ty);
+            }
+            ctx.restore();
+        }
+
+        // Dibuja una flechita de paralelismo (>>) en mitad de un lado horizontal/inclinado
+        function drawParallelArrow(ctx, x1, y1, x2, y2, color = '#38bdf8') {
+            const mx = (x1 + x2) / 2;
+            const my = (y1 + y2) / 2;
+            const ang = Math.atan2(y2 - y1, x2 - x1);
+
+            ctx.save();
+            ctx.translate(mx, my);
+            ctx.rotate(ang);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3.5;
+            ctx.lineCap = 'round';
+
+            [-5, 4].forEach(offsetX => {
+                ctx.beginPath();
+                ctx.moveTo(offsetX - 7, -8);
+                ctx.lineTo(offsetX + 2, 0);
+                ctx.lineTo(offsetX - 7, 8);
+                ctx.stroke();
+            });
+            ctx.restore();
+        }
+
+        // Función auxiliar para dibujar el polígono base con brillo escolar y vértices
+        function drawBasePolygon(ctx, points, fillColor, strokeColor) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.closePath();
+
+            ctx.fillStyle = fillColor;
+            ctx.shadowColor = strokeColor;
+            ctx.shadowBlur = 18;
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 6;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Vértices blancos redondeados
+            points.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 6.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.strokeStyle = '#0f172a';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+            });
+            ctx.restore();
+        }
+
+        /**
+         * Dibuja cualquier figura del temario en un canvas dado.
+         * @param {HTMLCanvasElement} canvas - Elemento canvas donde dibujar.
+         * @param {string} shapeId - Identificador de la figura en SHAPES_DB o DOUBLE_TRIANGLES_DB.
+         * @param {boolean} showExtraHints - Si true, muestra etiquetas adicionales de ayuda.
+         */
+        function renderShapeOnCanvas(canvas, shapeId, showExtraHints = false) {
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // Cuadrícula escolar sutil de fondo
+            ctx.save();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+            ctx.lineWidth = 1;
+            const step = 40;
+            for (let x = step; x < w; x += step) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = step; y < h; y += step) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+            ctx.restore();
+
+            const cx = w / 2;
+            const cy = h / 2;
+
+            // Escalado proporcional por si es un canvas pequeño (cuadrícula 2x2 o chuleta)
+            const scale = Math.min(w / 760, h / 440);
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.scale(scale, scale);
+
+            switch (shapeId) {
+                // ==============================================================
+                // 1. TRIÁNGULO EQUILÁTERO (3 lados iguales)
+                // ==============================================================
+                case 'tri_equilatero':
+                case 'dbl_equi_acut': {
+                    const side = 270;
+                    const triH = side * Math.sqrt(3) / 2;
+                    const pTop = { x: 0, y: -triH * 0.58 };
+                    const pLeft = { x: -side / 2, y: triH * 0.42 };
+                    const pRight = { x: side / 2, y: triH * 0.42 };
+
+                    if (shapeId === 'dbl_equi_acut' || showExtraHints) {
+                        drawAngleArc(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, pRight.x, pRight.y, 38, '#38bdf8', '60º');
+                        drawAngleArc(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, pTop.x, pTop.y, 38, '#38bdf8', '60º');
+                        drawAngleArc(ctx, pRight.x, pRight.y, pTop.x, pTop.y, pLeft.x, pLeft.y, 38, '#38bdf8', '60º');
+                    }
+
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(56, 189, 248, 0.25)', '#38bdf8');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, 1, '#facc15');
+                    break;
+                }
+
+                // ==============================================================
+                // 2. TRIÁNGULO ISÓSCELES (2 lados iguales)
+                // ==============================================================
+                case 'tri_isosceles': {
+                    const pTop = { x: 0, y: -155 };
+                    const pLeft = { x: -105, y: 135 };
+                    const pRight = { x: 105, y: 135 };
+
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(168, 85, 247, 0.26)', '#c084fc');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, 2, '#f97316');
+                    break;
+                }
+
+                // ==============================================================
+                // 3. TRIÁNGULO ESCALENO (Ningún lado mide lo mismo)
+                // ==============================================================
+                case 'tri_escaleno': {
+                    const pTop = { x: 65, y: -115 };
+                    const pLeft = { x: -230, y: 120 };
+                    const pRight = { x: 210, y: 120 };
+
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(249, 115, 22, 0.24)', '#fb923c');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, 2, '#38bdf8');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, 3, '#4ade80');
+                    break;
+                }
+
+                // ==============================================================
+                // 4. TRIÁNGULO RECTÁNGULO (Un ángulo recto de 90º)
+                // ==============================================================
+                case 'tri_rectangulo': {
+                    // Igual al dibujo de la ficha: ángulo recto a la derecha o izquierda
+                    const pCorner = { x: 150, y: 120 };
+                    const pTop = { x: 150, y: -120 };
+                    const pLeft = { x: -180, y: 120 };
+
+                    drawRightAngleMark(ctx, pCorner.x, pCorner.y, pTop.x, pTop.y, pLeft.x, pLeft.y, 34);
+                    drawBasePolygon(ctx, [pTop, pLeft, pCorner], 'rgba(34, 197, 94, 0.25)', '#4ade80');
+
+                    ctx.fillStyle = '#4ade80';
+                    ctx.font = 'bold 24px "Segoe UI", Arial';
+                    ctx.fillText('90º (Recto)', pCorner.x - 140, pCorner.y - 42);
+                    break;
+                }
+
+                // ==============================================================
+                // 5. TRIÁNGULO ACUTÁNGULO (Tres ángulos agudos < 90º)
+                // ==============================================================
+                case 'tri_acutangulo': {
+                    const pTop = { x: -35, y: -135 };
+                    const pLeft = { x: -175, y: 120 };
+                    const pRight = { x: 185, y: 120 };
+
+                    drawAngleArc(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, pRight.x, pRight.y, 40, '#38bdf8', '<90º');
+                    drawAngleArc(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, pTop.x, pTop.y, 40, '#38bdf8', '<90º');
+                    drawAngleArc(ctx, pRight.x, pRight.y, pTop.x, pTop.y, pLeft.x, pLeft.y, 40, '#38bdf8', '<90º');
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(56, 189, 248, 0.22)', '#38bdf8');
+                    break;
+                }
+
+                // ==============================================================
+                // 6. TRIÁNGULO OBTUSÁNGULO (Un ángulo obtuso > 90º)
+                // ==============================================================
+                case 'tri_obtusangulo': {
+                    const pTop = { x: -55, y: -85 };
+                    const pLeft = { x: -230, y: 115 };
+                    const pRight = { x: 235, y: 115 };
+
+                    drawAngleArc(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, pRight.x, pRight.y, 48, '#f97316', '>90º (Obtuso)');
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(249, 115, 22, 0.25)', '#f97316');
+                    break;
+                }
+
+                // ==============================================================
+                // ESPECIALES TABLA "PRACTICO" DE LA HOJA 1 (LADOS + ÁNGULOS)
+                // ==============================================================
+                case 'dbl_esc_rect': {
+                    // Columna 2 de la ficha: Escaleno + Rectángulo
+                    const pCorner = { x: -165, y: 115 };
+                    const pTop = { x: -165, y: -115 };
+                    const pRight = { x: 195, y: 115 };
+
+                    drawRightAngleMark(ctx, pCorner.x, pCorner.y, pTop.x, pTop.y, pRight.x, pRight.y, 32);
+                    drawBasePolygon(ctx, [pTop, pCorner, pRight], 'rgba(34, 197, 94, 0.24)', '#4ade80');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pCorner.x, pCorner.y, 1, '#facc15');
+                    drawSideTicks(ctx, pCorner.x, pCorner.y, pRight.x, pRight.y, 2, '#38bdf8');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 3, '#f97316');
+                    break;
+                }
+
+                case 'dbl_iso_obt': {
+                    // Columna 3 de la ficha: Triángulo invertido Isósceles + Obtusángulo
+                    const pBottom = { x: 0, y: 110 };
+                    const pLeft = { x: -220, y: -95 };
+                    const pRight = { x: 220, y: -95 };
+
+                    drawAngleArc(ctx, pBottom.x, pBottom.y, pRight.x, pRight.y, pLeft.x, pLeft.y, 46, '#f97316', '115º (>90º)');
+                    drawBasePolygon(ctx, [pLeft, pRight, pBottom], 'rgba(192, 132, 252, 0.25)', '#c084fc');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pBottom.x, pBottom.y, 1, '#facc15');
+                    drawSideTicks(ctx, pRight.x, pRight.y, pBottom.x, pBottom.y, 1, '#facc15');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, 2, '#38bdf8');
+                    break;
+                }
+
+                case 'dbl_esc_obt': {
+                    // Columna 4 de la ficha: Escaleno + Obtusángulo
+                    const pTop = { x: 45, y: -75 };
+                    const pLeft = { x: -245, y: 110 };
+                    const pRight = { x: 225, y: 110 };
+
+                    drawAngleArc(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, pRight.x, pRight.y, 46, '#f97316', '120º (>90º)');
+                    drawBasePolygon(ctx, [pTop, pLeft, pRight], 'rgba(249, 115, 22, 0.25)', '#fb923c');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, 2, '#38bdf8');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pRight.x, pRight.y, 3, '#4ade80');
+                    break;
+                }
+
+                case 'dbl_iso_rect': {
+                    // Isósceles + Rectángulo
+                    const pCorner = { x: -130, y: 120 };
+                    const pTop = { x: -130, y: -120 };
+                    const pRight = { x: 110, y: 120 };
+
+                    drawRightAngleMark(ctx, pCorner.x, pCorner.y, pTop.x, pTop.y, pRight.x, pRight.y, 32);
+                    drawBasePolygon(ctx, [pTop, pCorner, pRight], 'rgba(56, 189, 248, 0.25)', '#38bdf8');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pCorner.x, pCorner.y, 1, '#facc15');
+                    drawSideTicks(ctx, pCorner.x, pCorner.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 2, '#f97316');
+                    break;
+                }
+
+                // ==============================================================
+                // 7. CUADRADO (4 lados iguales y 4 ángulos rectos)
+                // ==============================================================
+                case 'cuad_cuadrado': {
+                    const s = 125;
+                    const pTL = { x: -s, y: -s };
+                    const pTR = { x: s, y: -s };
+                    const pBR = { x: s, y: s };
+                    const pBL = { x: -s, y: s };
+
+                    drawRightAngleMark(ctx, pTL.x, pTL.y, pTR.x, pTR.y, pBL.x, pBL.y, 26);
+                    drawRightAngleMark(ctx, pTR.x, pTR.y, pBR.x, pBR.y, pTL.x, pTL.y, 26);
+                    drawRightAngleMark(ctx, pBR.x, pBR.y, pBL.x, pBL.y, pTR.x, pTR.y, 26);
+                    drawRightAngleMark(ctx, pBL.x, pBL.y, pTL.x, pTL.y, pBR.x, pBR.y, 26);
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(56, 189, 248, 0.25)', '#38bdf8');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pTR.x, pTR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTR.x, pTR.y, pBR.x, pBR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pBR.x, pBR.y, pBL.x, pBL.y, 1, '#facc15');
+                    drawSideTicks(ctx, pBL.x, pBL.y, pTL.x, pTL.y, 1, '#facc15');
+                    break;
+                }
+
+                // ==============================================================
+                // 8. RECTÁNGULO (Lados iguales 2 a 2 y 4 ángulos rectos)
+                // ==============================================================
+                case 'cuad_rectangulo': {
+                    const w2 = 205, h2 = 110;
+                    const pTL = { x: -w2, y: -h2 };
+                    const pTR = { x: w2, y: -h2 };
+                    const pBR = { x: w2, y: h2 };
+                    const pBL = { x: -w2, y: h2 };
+
+                    drawRightAngleMark(ctx, pTL.x, pTL.y, pTR.x, pTR.y, pBL.x, pBL.y, 26);
+                    drawRightAngleMark(ctx, pTR.x, pTR.y, pBR.x, pBR.y, pTL.x, pTL.y, 26);
+                    drawRightAngleMark(ctx, pBR.x, pBR.y, pBL.x, pBL.y, pTR.x, pTR.y, 26);
+                    drawRightAngleMark(ctx, pBL.x, pBL.y, pTL.x, pTL.y, pBR.x, pBR.y, 26);
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(34, 197, 94, 0.24)', '#4ade80');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pTR.x, pTR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pBL.x, pBL.y, pBR.x, pBR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pBL.x, pBL.y, 2, '#f97316');
+                    drawSideTicks(ctx, pTR.x, pTR.y, pBR.x, pBR.y, 2, '#f97316');
+                    break;
+                }
+
+                // ==============================================================
+                // 9. ROMBO (4 lados iguales y ángulos iguales dos a dos)
+                // ==============================================================
+                case 'cuad_rombo': {
+                    const pTop = { x: 0, y: -120 };
+                    const pRight = { x: 195, y: 0 };
+                    const pBottom = { x: 0, y: 120 };
+                    const pLeft = { x: -195, y: 0 };
+
+                    drawAngleArc(ctx, pTop.x, pTop.y, pLeft.x, pLeft.y, pRight.x, pRight.y, 32, '#f97316');
+                    drawAngleArc(ctx, pBottom.x, pBottom.y, pRight.x, pRight.y, pLeft.x, pLeft.y, 32, '#f97316');
+                    drawAngleArc(ctx, pLeft.x, pLeft.y, pBottom.x, pBottom.y, pTop.x, pTop.y, 36, '#38bdf8');
+                    drawAngleArc(ctx, pRight.x, pRight.y, pTop.x, pTop.y, pBottom.x, pBottom.y, 36, '#38bdf8');
+
+                    drawBasePolygon(ctx, [pTop, pRight, pBottom, pLeft], 'rgba(192, 132, 252, 0.26)', '#c084fc');
+                    drawSideTicks(ctx, pTop.x, pTop.y, pRight.x, pRight.y, 1, '#facc15');
+                    drawSideTicks(ctx, pRight.x, pRight.y, pBottom.x, pBottom.y, 1, '#facc15');
+                    drawSideTicks(ctx, pBottom.x, pBottom.y, pLeft.x, pLeft.y, 1, '#facc15');
+                    drawSideTicks(ctx, pLeft.x, pLeft.y, pTop.x, pTop.y, 1, '#facc15');
+                    break;
+                }
+
+                // ==============================================================
+                // 10. ROMBOIDE (Lados y ángulos iguales dos a dos)
+                // ==============================================================
+                case 'cuad_romboide': {
+                    const pTL = { x: -125, y: -105 };
+                    const pTR = { x: 215, y: -105 };
+                    const pBR = { x: 125, y: 105 };
+                    const pBL = { x: -215, y: 105 };
+
+                    drawAngleArc(ctx, pTL.x, pTL.y, pBL.x, pBL.y, pTR.x, pTR.y, 34, '#f97316');
+                    drawAngleArc(ctx, pBR.x, pBR.y, pTR.x, pTR.y, pBL.x, pBL.y, 34, '#f97316');
+                    drawAngleArc(ctx, pBL.x, pBL.y, pBR.x, pBR.y, pTL.x, pTL.y, 34, '#38bdf8');
+                    drawAngleArc(ctx, pTR.x, pTR.y, pTL.x, pTL.y, pBR.x, pBR.y, 34, '#38bdf8');
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(250, 204, 21, 0.22)', '#facc15');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pTR.x, pTR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pBL.x, pBL.y, pBR.x, pBR.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pBL.x, pBL.y, 2, '#38bdf8');
+                    drawSideTicks(ctx, pTR.x, pTR.y, pBR.x, pBR.y, 2, '#38bdf8');
+                    break;
+                }
+
+                // ==============================================================
+                // 11. TRAPECIO RECTÁNGULO (2 lados paralelos + lado perpendicular)
+                // ==============================================================
+                case 'cuad_trap_rectangulo': {
+                    const pTL = { x: -195, y: -105 };
+                    const pTR = { x: 55, y: -105 };
+                    const pBR = { x: 205, y: 110 };
+                    const pBL = { x: -195, y: 110 };
+
+                    drawRightAngleMark(ctx, pTL.x, pTL.y, pTR.x, pTR.y, pBL.x, pBL.y, 28);
+                    drawRightAngleMark(ctx, pBL.x, pBL.y, pTL.x, pTL.y, pBR.x, pBR.y, 28);
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(56, 189, 248, 0.24)', '#38bdf8');
+                    drawParallelArrow(ctx, pTL.x, pTL.y, pTR.x, pTR.y, '#facc15');
+                    drawParallelArrow(ctx, pBL.x, pBL.y, pBR.x, pBR.y, '#facc15');
+                    break;
+                }
+
+                // ==============================================================
+                // 12. TRAPECIO ISÓSCELES (2 lados paralelos + no paralelos iguales)
+                // ==============================================================
+                case 'cuad_trap_isosceles': {
+                    const pTL = { x: -115, y: -105 };
+                    const pTR = { x: 115, y: -105 };
+                    const pBR = { x: 215, y: 110 };
+                    const pBL = { x: -215, y: 110 };
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(168, 85, 247, 0.25)', '#c084fc');
+                    drawParallelArrow(ctx, pTL.x, pTL.y, pTR.x, pTR.y, '#38bdf8');
+                    drawParallelArrow(ctx, pBL.x, pBL.y, pBR.x, pBR.y, '#38bdf8');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pBL.x, pBL.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTR.x, pTR.y, pBR.x, pBR.y, 1, '#facc15');
+                    break;
+                }
+
+                // ==============================================================
+                // 13. TRAPECIO ESCALENO (2 lados paralelos + no paralelos desiguales)
+                // ==============================================================
+                case 'cuad_trap_escaleno': {
+                    const pTL = { x: -145, y: -105 };
+                    const pTR = { x: 45, y: -105 };
+                    const pBR = { x: 225, y: 110 };
+                    const pBL = { x: -205, y: 110 };
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(249, 115, 22, 0.24)', '#fb923c');
+                    drawParallelArrow(ctx, pTL.x, pTL.y, pTR.x, pTR.y, '#38bdf8');
+                    drawParallelArrow(ctx, pBL.x, pBL.y, pBR.x, pBR.y, '#38bdf8');
+                    drawSideTicks(ctx, pTL.x, pTL.y, pBL.x, pBL.y, 1, '#facc15');
+                    drawSideTicks(ctx, pTR.x, pTR.y, pBR.x, pBR.y, 2, '#4ade80');
+                    break;
+                }
+
+                // ==============================================================
+                // 14. TRAPEZOIDE (Ningún lado paralelo)
+                // ==============================================================
+                case 'cuad_trapezoide': {
+                    // Igual que el trapezoide inferior de la Hoja 2
+                    const pTL = { x: -165, y: -120 };
+                    const pTR = { x: 135, y: -50 };
+                    const pBR = { x: 215, y: 115 };
+                    const pBL = { x: -215, y: 115 };
+
+                    drawBasePolygon(ctx, [pTL, pTR, pBR, pBL], 'rgba(244, 63, 94, 0.24)', '#fb7185');
+                    break;
+                }
+            }
+
+            ctx.restore();
+        }
+
+        /* ==========================================================================
+           SECCIÓN 4: ESTADO GLOBAL DEL JUEGO Y CONFIGURACIÓN DEL MENÚ
+           ========================================================================== */
+        const AVATAR_LIST = ['🦊', '🐼', '🦁', '🐸', '🦄', '🦖', '🐯', '🐙', '🐨', '🚀'];
+
+        let gameConfig = {
+            topic: 'all',      // 'all', 'triangles', 'quads'
+            players: 1,        // 1 o 2 jugadores
+            initialLives: 5,   // 3, 5 o 99 (infinitas)
+            totalRounds: 14,   // 10, 14 o 20 preguntas
+            p1AvatarIdx: 0,
+            p2AvatarIdx: 1
+        };
+
+        let gameState = {
+            currentRound: 0,
+            lives: 5,
+            streak: 0,
+            bestStreak: 0,
+            scores: [0, 0],
+            correctCount: 0,
+            activePlayer: 0, // 0 = J1, 1 = J2
+            questionsQueue: [],
+            currentQuestion: null,
+            answered: false,
+            doubleSelection: { side: null, angle: null }
+        };
+
+        // Funciones del Menú Principal
+        function selectTopic(topic) {
+            playClickSound();
+            gameConfig.topic = topic;
+            document.getElementById('topicAll').classList.toggle('selected', topic === 'all');
+            document.getElementById('topicTriangles').classList.toggle('selected', topic === 'triangles');
+            document.getElementById('topicQuads').classList.toggle('selected', topic === 'quads');
+        }
+
+        function selectPlayers(num) {
+            playClickSound();
+            gameConfig.players = num;
+            document.getElementById('mode1P').classList.toggle('selected', num === 1);
+            document.getElementById('mode2P').classList.toggle('selected', num === 2);
+            document.getElementById('p2AvatarCard').style.opacity = num === 2 ? '1' : '0.45';
+        }
+
+        function selectLives(lives) {
+            playClickSound();
+            gameConfig.initialLives = lives;
+            document.getElementById('lives3').classList.toggle('selected', lives === 3);
+            document.getElementById('lives5').classList.toggle('selected', lives === 5);
+            document.getElementById('lives99').classList.toggle('selected', lives === 99);
+        }
+
+        function selectRounds(rounds) {
+            playClickSound();
+            gameConfig.totalRounds = rounds;
+            document.getElementById('rounds10').classList.toggle('selected', rounds === 10);
+            document.getElementById('rounds14').classList.toggle('selected', rounds === 14);
+            document.getElementById('rounds20').classList.toggle('selected', rounds === 20);
+        }
+
+        function cycleAvatar(playerNum) {
+            playClickSound();
+            if (playerNum === 1) {
+                gameConfig.p1AvatarIdx = (gameConfig.p1AvatarIdx + 1) % AVATAR_LIST.length;
+                document.getElementById('p1AvatarBtn').textContent = AVATAR_LIST[gameConfig.p1AvatarIdx];
+            } else {
+                gameConfig.p2AvatarIdx = (gameConfig.p2AvatarIdx + 1) % AVATAR_LIST.length;
+                document.getElementById('p2AvatarBtn').textContent = AVATAR_LIST[gameConfig.p2AvatarIdx];
+            }
+        }
+
+        // Utilidad para barajar un array aleatoriamente (algoritmo Fisher-Yates)
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /* ==========================================================================
+           SECCIÓN 5: GENERADOR INTELIGENTE DE RONDAS ALTERNAS (NOMBRE ↔ FIGURA)
+           --------------------------------------------------------------------------
+           Cumple exactamente el requisito del usuario:
+           - En una ronda el niño ve la FIGURA y tiene que elegir su NOMBRE.
+           - En la siguiente ronda ve el NOMBRE y tiene que elegir la FIGURA (dibujo).
+           - Además, cada ciertas rondas (si el temario incluye triángulos), incluye
+             el reto "PRACTICO" de la Hoja 1 (clasificar lados y ángulos a la vez).
+           ========================================================================== */
+        function buildQuestionsQueue() {
+            let pool = SHAPES_DB;
+            if (gameConfig.topic === 'triangles') {
+                pool = SHAPES_DB.filter(s => s.family === 'triangles');
+            } else if (gameConfig.topic === 'quads') {
+                pool = SHAPES_DB.filter(s => s.family === 'quads');
+            }
+
+            const queue = [];
+            let bag = shuffleArray(pool);
+            let doubleBag = shuffleArray(DOUBLE_TRIANGLES_DB);
+
+            for (let i = 0; i < gameConfig.totalRounds; i++) {
+                if (bag.length === 0) bag = shuffleArray(pool);
+
+                // Cada 5ª pregunta (si hay triángulos en el temario), lanzamos un reto "PRACTICO" de la tabla
+                if ((gameConfig.topic !== 'quads') && (i > 0) && ((i + 1) % 5 === 0)) {
+                    if (doubleBag.length === 0) doubleBag = shuffleArray(DOUBLE_TRIANGLES_DB);
+                    const dblItem = doubleBag.pop();
+                    queue.push({
+                        mode: 'double_triangle',
+                        target: dblItem
+                    });
+                    continue;
+                }
+
+                const targetShape = bag.pop();
+
+                // Alternancia estricta:
+                // Ronda par (0, 2, 4...) -> 'guess_name' (Ves la figura, eliges el nombre)
+                // Ronda impar (1, 3, 5...) -> 'pick_figure' (Te dicen el nombre, eliges la figura)
+                const mode = (i % 2 === 0) ? 'guess_name' : 'pick_figure';
+
+                // Elegimos 3 distractores preferiblemente de la misma familia o subgrupo para que aprenda a distinguirlos
+                const sameFamily = pool.filter(s => s.id !== targetShape.id && s.family === targetShape.family);
+                const otherFamily = SHAPES_DB.filter(s => s.id !== targetShape.id && s.family !== targetShape.family);
+                const distractorPool = [...shuffleArray(sameFamily), ...shuffleArray(otherFamily)];
+                const distractors = distractorPool.slice(0, 3);
+
+                const options = shuffleArray([targetShape, ...distractors]);
+
+                queue.push({
+                    mode: mode,
+                    target: targetShape,
+                    options: options
+                });
+            }
+
+            return queue;
+        }
+
+        /* ==========================================================================
+           SECCIÓN 6: CONTROL DEL FLUJO DE LA PARTIDA (INICIO, RONDAS, ACIERTOS, VIDAS)
+           ========================================================================== */
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            const inGame = (screenId === 'gameScreen');
+            document.getElementById('hudStats').classList.toggle('visible', inGame);
+            document.getElementById('btnBackMenu').style.display = (screenId === 'menuScreen') ? 'none' : 'flex';
+        }
+
+        function goToMenu() {
+            playClickSound();
+            showScreen('menuScreen');
+        }
+
+        function startGame() {
+            playSuccessSound(1);
+
+            gameState.currentRound = 0;
+            gameState.lives = gameConfig.initialLives;
+            gameState.streak = 0;
+            gameState.bestStreak = 0;
+            gameState.scores = [0, 0];
+            gameState.correctCount = 0;
+            gameState.activePlayer = 0;
+            gameState.questionsQueue = buildQuestionsQueue();
+
+            // Configurar avatares en la barra inferior
+            document.getElementById('turnAvatarP1').textContent = AVATAR_LIST[gameConfig.p1AvatarIdx];
+            document.getElementById('turnAvatarP2').textContent = AVATAR_LIST[gameConfig.p2AvatarIdx];
+            document.getElementById('badgeP2').style.display = (gameConfig.players === 2) ? 'flex' : 'none';
+
+            showScreen('gameScreen');
+            loadCurrentQuestion();
+        }
+
+        // Actualiza los contadores superiores (Vidas, Puntos, Racha y Ronda)
+        function updateHUD() {
+            // Vidas con corazones
+            const livesEl = document.getElementById('hudLives');
+            if (gameConfig.initialLives === 99) {
+                livesEl.textContent = '❤️ ♾️';
+            } else {
+                const fullHearts = '❤️'.repeat(Math.max(0, gameState.lives));
+                const emptyHearts = '🖤'.repeat(Math.max(0, gameConfig.initialLives - gameState.lives));
+                livesEl.textContent = fullHearts + emptyHearts;
+            }
+
+            const totalScore = gameState.scores[0] + gameState.scores[1];
+            document.getElementById('hudScore').textContent = totalScore;
+            document.getElementById('hudStreak').textContent = gameState.streak;
+            document.getElementById('hudRound').textContent = `${gameState.currentRound + 1} / ${gameConfig.totalRounds}`;
+
+            document.getElementById('scoreP1').textContent = gameState.scores[0];
+            document.getElementById('scoreP2').textContent = gameState.scores[1];
+
+            document.getElementById('badgeP1').classList.toggle('active-turn', gameState.activePlayer === 0);
+            document.getElementById('badgeP2').classList.toggle('active-turn', gameState.activePlayer === 1);
+        }
+
+        // Carga en pantalla la pregunta actual según su modo (A: Nombre, B: Figura, C: Tabla Doble)
+        function loadCurrentQuestion() {
+            gameState.answered = false;
+            const q = gameState.questionsQueue[gameState.currentRound];
+            gameState.currentQuestion = q;
+
+            document.getElementById('btnNextQuestion').style.display = 'none';
+            document.getElementById('btnUseHint').disabled = false;
+            document.getElementById('btnUseHint').style.opacity = '1';
+
+            updateHUD();
+
+            const modeBadge = document.getElementById('questionModeBadge');
+            const titleEl = document.getElementById('questionTitle');
+            const clueEl = document.getElementById('questionClue');
+            const feedbackEl = document.getElementById('feedbackMessage');
+
+            const layoutName = document.getElementById('modeGuessNameLayout');
+            const layoutFigure = document.getElementById('modePickFigureLayout');
+            const layoutDouble = document.getElementById('modeDoubleTriangleLayout');
+
+            layoutName.style.display = 'none';
+            layoutFigure.style.display = 'none';
+            layoutDouble.style.display = 'none';
+
+            const playerPrefix = (gameConfig.players === 2)
+                ? `${gameState.activePlayer === 0 ? AVATAR_LIST[gameConfig.p1AvatarIdx] + ' Turno J1' : AVATAR_LIST[gameConfig.p2AvatarIdx] + ' Turno J2'} · `
+                : '';
+
+            // ------------------------------------------------------------------
+            // MODO A: VEMOS LA FIGURA ➔ ELEGIMOS SU NOMBRE
+            // ------------------------------------------------------------------
+            if (q.mode === 'guess_name') {
+                layoutName.style.display = 'flex';
+                modeBadge.className = 'mode-tag';
+                modeBadge.textContent = `RONDA ${gameState.currentRound + 1} · ¿CÓMO SE LLAMA?`;
+
+                titleEl.innerHTML = `${playerPrefix}¿Cuál es el <span class="highlight-term">nombre</span> de esta figura?`;
+                clueEl.textContent = `Pista de la ficha: "${q.target.definition}"`;
+                feedbackEl.textContent = '👀 Mira el dibujo de la pizarra y elige su nombre correcto.';
+
+                document.getElementById('canvasCategoryBadge').textContent = q.target.subGroup.toUpperCase();
+                document.getElementById('canvasLegendBox').textContent = `📏 ${q.target.definition}`;
+
+                const mainCanvas = document.getElementById('mainFigureCanvas');
+                renderShapeOnCanvas(mainCanvas, q.target.id, false);
+
+                // Generar los 4 botones de nombre
+                const container = document.getElementById('nameOptionsContainer');
+                container.innerHTML = '';
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'name-option-btn';
+                    btn.id = `nameOptBtn_${idx}`;
+                    btn.onclick = () => submitChoiceAnswer(opt.id, btn);
+                    btn.innerHTML = `
+                        <div class="opt-number">${idx + 1}</div>
+                        <div class="opt-texts">
+                            <span class="opt-main-name">${opt.name}</span>
+                            <span class="opt-sub-desc">${opt.subGroup}</span>
+                        </div>
+                    `;
+                    container.appendChild(btn);
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // MODO B: NOS DICEN EL NOMBRE ➔ ELEGIMOS LA FIGURA (EL DIBUJO)
+            // ------------------------------------------------------------------
+            else if (q.mode === 'pick_figure') {
+                layoutFigure.style.display = 'grid';
+                modeBadge.className = 'mode-tag pick-figure-mode';
+                modeBadge.textContent = `RONDA ${gameState.currentRound + 1} · ¡BUSCA EL DIBUJO!`;
+
+                titleEl.innerHTML = `${playerPrefix}¿Cuál de estas figuras es un <span class="highlight-term">${q.target.name.toUpperCase()}</span>?`;
+                clueEl.textContent = `Recuerda: "${q.target.definition}" (${q.target.subGroup})`;
+                feedbackEl.textContent = '🔍 Apunta con el mando de la tele al dibujo que corresponda.';
+
+                layoutFigure.innerHTML = '';
+                q.options.forEach((opt, idx) => {
+                    const card = document.createElement('button');
+                    card.className = 'figure-choice-card';
+                    card.id = `figOptCard_${idx}`;
+                    card.onclick = () => submitChoiceAnswer(opt.id, card);
+
+                    const cvs = document.createElement('canvas');
+                    cvs.width = 560;
+                    cvs.height = 300;
+
+                    const numBadge = document.createElement('div');
+                    numBadge.className = 'card-corner-num';
+                    numBadge.textContent = idx + 1;
+
+                    const revealLbl = document.createElement('div');
+                    revealLbl.className = 'card-reveal-label';
+                    revealLbl.id = `figRevealLbl_${idx}`;
+                    revealLbl.textContent = `Opción ${idx + 1}`;
+
+                    card.appendChild(cvs);
+                    card.appendChild(numBadge);
+                    card.appendChild(revealLbl);
+                    layoutFigure.appendChild(card);
+
+                    renderShapeOnCanvas(cvs, opt.id, false);
+                });
+            }
+
+            // ------------------------------------------------------------------
+            // MODO C: BONUS "PRACTICO" DE LA HOJA 1 (LADOS + ÁNGULOS)
+            // ------------------------------------------------------------------
+            else if (q.mode === 'double_triangle') {
+                layoutDouble.style.display = 'flex';
+                modeBadge.className = 'mode-tag double-mode';
+                modeBadge.textContent = `RONDA ${gameState.currentRound + 1} · ⭐ TABLA DE LA FICHA`;
+
+                titleEl.innerHTML = `${playerPrefix}Clasifica este triángulo según sus <span class="highlight-term">LADOS y ÁNGULOS</span>`;
+                clueEl.textContent = 'Igual que en el ejercicio "PRACTICO" de tu primera hoja.';
+                feedbackEl.textContent = '👆 Selecciona 1 botón de LADOS, 1 botón de ÁNGULOS y pulsa COMPROBAR.';
+
+                gameState.doubleSelection = { side: null, angle: null };
+                document.querySelectorAll('.double-pick-btn').forEach(b => {
+                    b.classList.remove('selected', 'correct-choice', 'wrong-choice');
+                });
+                document.getElementById('btnVerifyDouble').style.display = 'block';
+                document.getElementById('doubleLegendBox').textContent = 'Observa las rayitas de sus lados y la abertura de sus ángulos.';
+
+                const dblCanvas = document.getElementById('doubleTriangleCanvas');
+                renderShapeOnCanvas(dblCanvas, q.target.drawId, false);
+            }
+        }
+
+        // Comodín "Pista del Profe": muestra información visual extra sin restar vidas
+        function triggerVisualHint() {
+            if (gameState.answered) return;
+            playHintSound();
+
+            const q = gameState.currentQuestion;
+            const feedbackEl = document.getElementById('feedbackMessage');
+
+            if (q.mode === 'guess_name') {
+                renderShapeOnCanvas(document.getElementById('mainFigureCanvas'), q.target.id, true);
+                document.getElementById('canvasLegendBox').textContent = `💡 PISTA: ${q.target.visualHint}`;
+                feedbackEl.textContent = `💡 ${q.target.visualHint}`;
+            } else if (q.mode === 'pick_figure') {
+                feedbackEl.textContent = `💡 PISTA: ${q.target.visualHint}`;
+                document.getElementById('questionClue').textContent = `💡 ${q.target.visualHint}`;
+            } else if (q.mode === 'double_triangle') {
+                document.getElementById('doubleLegendBox').textContent = `💡 PISTA: ${q.target.explanation}`;
+                feedbackEl.textContent = `💡 Fíjate en la pista de la pizarra.`;
+            }
+
+            document.getElementById('btnUseHint').disabled = true;
+            document.getElementById('btnUseHint').style.opacity = '0.5';
+        }
+
+        // Procesa la respuesta del niño en el Modo A (Nombre) y Modo B (Figura)
+        function submitChoiceAnswer(chosenId, clickedElement) {
+            if (gameState.answered) return;
+            gameState.answered = true;
+
+            const q = gameState.currentQuestion;
+            const isCorrect = (chosenId === q.target.id);
+            const feedbackEl = document.getElementById('feedbackMessage');
+
+            // Si estamos en el modo de elegir figura, revelamos los nombres de las 4 tarjetas para que aprenda
+            if (q.mode === 'pick_figure') {
+                q.options.forEach((opt, idx) => {
+                    const lbl = document.getElementById(`figRevealLbl_${idx}`);
+                    if (lbl) lbl.textContent = opt.name;
+                    const card = document.getElementById(`figOptCard_${idx}`);
+                    if (opt.id === q.target.id && card) {
+                        card.classList.add('correct-choice');
+                    }
+                });
+            } else if (q.mode === 'guess_name') {
+                q.options.forEach((opt, idx) => {
+                    const btn = document.getElementById(`nameOptBtn_${idx}`);
+                    if (opt.id === q.target.id && btn) {
+                        btn.classList.add('correct-choice');
+                    }
+                });
+            }
+
+            if (isCorrect) {
+                clickedElement.classList.add('correct-choice');
+                gameState.streak++;
+                if (gameState.streak > gameState.bestStreak) gameState.bestStreak = gameState.streak;
+                gameState.correctCount++;
+
+                const pointsEarned = 100 + (gameState.streak - 1) * 25;
+                gameState.scores[gameState.activePlayer] += pointsEarned;
+
+                playSuccessSound(gameState.streak);
+                setTimeout(() => playShapeSignatureSound(q.target.soundType), 360);
+
+                feedbackEl.style.color = '#4ade80';
+                feedbackEl.textContent = `🎉 ¡GENIAL! Es ${q.target.name} (+${pointsEarned} pts · 🔥 Racha x${gameState.streak})`;
+            } else {
+                clickedElement.classList.add('wrong-choice');
+                gameState.streak = 0;
+
+                if (gameConfig.initialLives !== 99) {
+                    gameState.lives--;
+                }
+
+                playWrongSound();
+                const wrapper = document.getElementById('mainWrapper');
+                wrapper.classList.remove('shake');
+                void wrapper.offsetWidth;
+                wrapper.classList.add('shake');
+
+                feedbackEl.style.color = '#fca5a5';
+                feedbackEl.textContent = `❌ ¡Casi! Era ${q.target.name}: "${q.target.definition}"`;
+            }
+
+            updateHUD();
+            document.getElementById('btnNextQuestion').style.display = 'block';
+            document.getElementById('btnNextQuestion').focus();
+        }
+
+        // Selección de botones en el Modo C (Tabla Doble de Triángulos)
+        function selectDoubleOption(category, value) {
+            if (gameState.answered) return;
+            playClickSound();
+
+            if (category === 'side') {
+                gameState.doubleSelection.side = value;
+                ['equilatero', 'isosceles', 'escaleno'].forEach(k => {
+                    document.getElementById(`dblSide_${k}`).classList.toggle('selected', k === value);
+                });
+            } else {
+                gameState.doubleSelection.angle = value;
+                ['acutangulo', 'rectangulo', 'obtusangulo'].forEach(k => {
+                    document.getElementById(`dblAng_${k}`).classList.toggle('selected', k === value);
+                });
+            }
+        }
+
+        function checkDoubleTriangleAnswer() {
+            if (gameState.answered) return;
+            const sel = gameState.doubleSelection;
+            const feedbackEl = document.getElementById('feedbackMessage');
+
+            if (!sel.side || !sel.angle) {
+                playClickSound();
+                feedbackEl.style.color = '#fde047';
+                feedbackEl.textContent = '⚠️ ¡Elige primero una opción de LADOS y otra de ÁNGULOS!';
+                return;
+            }
+
+            gameState.answered = true;
+            document.getElementById('btnVerifyDouble').style.display = 'none';
+
+            const target = gameState.currentQuestion.target;
+            const sideOk = (sel.side === target.sideAnswer);
+            const angleOk = (sel.angle === target.angleAnswer);
+
+            // Marcar visualmente los botones correctos
+            document.getElementById(`dblSide_${target.sideAnswer}`).classList.add('correct-choice');
+            document.getElementById(`dblAng_${target.angleAnswer}`).classList.add('correct-choice');
+
+            if (!sideOk) document.getElementById(`dblSide_${sel.side}`).classList.add('wrong-choice');
+            if (!angleOk) document.getElementById(`dblAng_${sel.angle}`).classList.add('wrong-choice');
+
+            if (sideOk && angleOk) {
+                gameState.streak++;
+                if (gameState.streak > gameState.bestStreak) gameState.bestStreak = gameState.streak;
+                gameState.correctCount++;
+
+                const pts = 150 + (gameState.streak - 1) * 25;
+                gameState.scores[gameState.activePlayer] += pts;
+
+                playSuccessSound(gameState.streak);
+                feedbackEl.style.color = '#4ade80';
+                feedbackEl.textContent = `🌟 ¡DOBLE ACIERTO! ${target.explanation} (+${pts} pts)`;
+            } else {
+                gameState.streak = 0;
+                if (gameConfig.initialLives !== 99) gameState.lives--;
+
+                playWrongSound();
+                feedbackEl.style.color = '#fca5a5';
+                feedbackEl.textContent = `📚 ${target.explanation}`;
+            }
+
+            updateHUD();
+            document.getElementById('btnNextQuestion').style.display = 'block';
+            document.getElementById('btnNextQuestion').focus();
+        }
+
+        // Avanza a la siguiente pregunta o termina la partida si no quedan vidas o rondas
+        function nextQuestion() {
+            playClickSound();
+            document.getElementById('feedbackMessage').style.color = 'var(--gold)';
+
+            // ¿Se quedó sin vidas?
+            if (gameConfig.initialLives !== 99 && gameState.lives <= 0) {
+                finishGame(false);
+                return;
+            }
+
+            gameState.currentRound++;
+            if (gameState.currentRound >= gameConfig.totalRounds) {
+                finishGame(true);
+                return;
+            }
+
+            // Cambiar turno si hay 2 jugadores
+            if (gameConfig.players === 2) {
+                gameState.activePlayer = (gameState.activePlayer === 0) ? 1 : 0;
+            }
+
+            loadCurrentQuestion();
+        }
+
+        // Muestra la pantalla de Podio / Fin de Partida
+        function finishGame(completedAllRounds) {
+            showScreen('resultScreen');
+
+            const trophyEl = document.getElementById('resultTrophy');
+            const headlineEl = document.getElementById('resultHeadline');
+            const subEl = document.getElementById('resultSubtitle');
+            const statsRow = document.getElementById('resultStatsRow');
+
+            const totalScore = gameState.scores[0] + gameState.scores[1];
+
+            if (completedAllRounds) {
+                playSuccessSound(4);
+                trophyEl.textContent = '🏆';
+                headlineEl.textContent = '¡CAMPEÓN DE LAS FIGURAS GEOMÉTRICAS!';
+                subEl.textContent = `¡Has superado las ${gameConfig.totalRounds} rondas dominando Triángulos y Cuadriláteros!`;
+            } else {
+                playWrongSound();
+                trophyEl.textContent = '💪';
+                headlineEl.textContent = '¡SE ACABARON LAS VIDAS!';
+                subEl.textContent = '¡Has jugado genial! Dale a "Jugar otra vez" para batir tu récord.';
+            }
+
+            if (gameConfig.players === 1) {
+                statsRow.innerHTML = `
+                    <div class="result-stat-card">
+                        <h4>⭐ Puntuación Final</h4>
+                        <div class="big-val">${gameState.scores[0]} pts</div>
+                    </div>
+                    <div class="result-stat-card">
+                        <h4>✅ Aciertos</h4>
+                        <div class="big-val">${gameState.correctCount} / ${gameConfig.totalRounds}</div>
+                    </div>
+                    <div class="result-stat-card">
+                        <h4>🔥 Mejor Racha</h4>
+                        <div class="big-val">x${gameState.bestStreak}</div>
+                    </div>
+                `;
+            } else {
+                const p1 = gameState.scores[0];
+                const p2 = gameState.scores[1];
+                const winnerText = p1 > p2
+                    ? `¡Gana el Jugador 1 (${AVATAR_LIST[gameConfig.p1AvatarIdx]})!`
+                    : (p2 > p1 ? `¡Gana el Jugador 2 (${AVATAR_LIST[gameConfig.p2AvatarIdx]})!` : '¡Empate espectacular!');
+                subEl.textContent = winnerText;
+
+                statsRow.innerHTML = `
+                    <div class="result-stat-card">
+                        <h4>${AVATAR_LIST[gameConfig.p1AvatarIdx]} Jugador 1</h4>
+                        <div class="big-val">${p1} pts</div>
+                    </div>
+                    <div class="result-stat-card">
+                        <h4>${AVATAR_LIST[gameConfig.p2AvatarIdx]} Jugador 2</h4>
+                        <div class="big-val">${p2} pts</div>
+                    </div>
+                    <div class="result-stat-card">
+                        <h4>🔥 Mejor Racha</h4>
+                        <div class="big-val">x${gameState.bestStreak}</div>
+                    </div>
+                `;
+            }
+        }
+
+        /* ==========================================================================
+           SECCIÓN 7: PANTALLA DE "CHULETA DE LA FICHA" (MODO APRENDER INTERACTIVO)
+           --------------------------------------------------------------------------
+           Muestra los esquemas visuales de la Hoja 1 (Triángulos) y la Hoja 2
+           (Cuadriláteros). Al pulsar cualquier tarjeta con el mando de la tele,
+           suena su melodía característica.
+           ========================================================================== */
+        function openStudyScreen() {
+            playClickSound();
+            showScreen('studyScreen');
+            renderStudyCatalog('triangles');
+        }
+
+        function renderStudyCatalog(family) {
+            playClickSound();
+            document.getElementById('tabStudyTri').classList.toggle('active', family === 'triangles');
+            document.getElementById('tabStudyQuad').classList.toggle('active', family === 'quads');
+
+            const container = document.getElementById('studyGridContainer');
+            container.innerHTML = '';
+
+            const items = SHAPES_DB.filter(s => s.family === family);
+            container.style.gridTemplateColumns = (family === 'triangles') ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)';
+
+            items.forEach(item => {
+                const card = document.createElement('button');
+                card.className = 'study-card';
+                card.onclick = () => playShapeSignatureSound(item.soundType);
+
+                const cat = document.createElement('div');
+                cat.className = 'study-card-cat';
+                cat.textContent = item.subGroup;
+
+                const cvs = document.createElement('canvas');
+                cvs.width = 420;
+                cvs.height = 230;
+
+                const title = document.createElement('div');
+                title.className = 'study-card-title';
+                title.textContent = item.name;
+
+                const desc = document.createElement('div');
+                desc.className = 'study-card-desc';
+                desc.textContent = item.definition;
+
+                card.appendChild(cat);
+                card.appendChild(cvs);
+                card.appendChild(title);
+                card.appendChild(desc);
+                container.appendChild(card);
+
+                renderShapeOnCanvas(cvs, item.id, true);
+            });
+        }
+
+        /* ==========================================================================
+           SECCIÓN 8: SOPORTE PARA EL MANDO A DISTANCIA DE LA TV LG (TECLAS 1-4 Y ENTER)
+           --------------------------------------------------------------------------
+           Permite responder tanto con el puntero del LG Magic Remote como con los
+           botones numéricos 1, 2, 3, 4 y el botón OK/Enter del mando.
+           ========================================================================== */
+        window.addEventListener('keydown', (e) => {
+            const gameActive = document.getElementById('gameScreen').classList.contains('active');
+            if (!gameActive) return;
+
+            // Si ya respondió y pulsa Enter/Espacio, pasa a la siguiente pregunta
+            if (gameState.answered && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                nextQuestion();
+                return;
+            }
+
+            // Atajos numéricos 1, 2, 3, 4 del mando de la TV
+            if (!gameState.answered && ['1', '2', '3', '4'].includes(e.key)) {
+                const idx = parseInt(e.key, 10) - 1;
+                const q = gameState.currentQuestion;
+                if (!q) return;
+
+                if (q.mode === 'guess_name') {
+                    const btn = document.getElementById(`nameOptBtn_${idx}`);
+                    if (btn) btn.click();
+                } else if (q.mode === 'pick_figure') {
+                    const card = document.getElementById(`figOptCard_${idx}`);
+                    if (card) card.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
